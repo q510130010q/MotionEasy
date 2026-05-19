@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="GenDemo/GenDemo.csproj" Id="ee18f238-007a-446f-bcc3-1d47d72fe948" />
+  <Project Path="GenMotionEasy/GenMotionEasy.csproj" />
+  <Project Path="GsnMotionEasy/GsnMotionEasy.csproj" Id="587079da-e2df-4dd0-8912-90ed6166c898" />
+</Solution>

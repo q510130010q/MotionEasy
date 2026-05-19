@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pdftotext -layout \"D:/Csharp/GenMotionEasy/GEN系列运动控制器编程手册之高级功能.pdf\" \"D:/Csharp/GenMotionEasy/pdf_temp.txt\")"
+    ]
+  }
+}

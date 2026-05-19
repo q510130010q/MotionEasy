@@ -1,0 +1,4624 @@
+GEN 
+
+        
+
+                                               2019  03 
+                                         © 2019 
+  
+
+
+
+
+
+
+      
+
+
+      
+
+
+      
+
+
+
+
+
+
+
+                                 
+
+                                  108  10
+                W211                             1008-09 
+
+0755-26970817 26737236 26970824  +(852) 2358-1033
+0755-26970821                    +(852) 2719-8399
+googol@googoltech.com            sales@googoltech.com
+http://www.googoltech.com.cn
+                                                info@googoltech.com
+                                 http://www.googoltech.com
+
+ 86  3                                                             2© 2019 
+              40768
+                       
+
++886-4-23588245
++886-4-23586495
+twinfo@googoltech.com
+
+                         3© 2019 
+          
+
+                        
+    V1.0         2018  10  25 
+    V1.1         2019  03  01 
+    V1.2         2021  03  26 
+
+                                4© 2019 
+                                                                         
+
+  
+
+    
+
+      
+
+
+    
+
+       http://www.googoltech.com.cn
+
+
+      075526970817
+
+    
+
+      
+            support@googoltech.com
+            075526970843
+             W211 
+                              
+             518057
+
+    
+
+    
+
+
+    
+
+     C  Windows 
+
+
+    
+
+    
+
+    
+
+    GEN 
+    GEN 
+    GEN -
+
+                manual 
+
+                                                                                                                       5© 2019 
+                                                                         
+
+                        
+
+ ......................................................................................................................................................... 2
+ ......................................................................................................................................................... 2
+ ......................................................................................................................................................... 4
+................................................................................................................................................................. 5
+................................................................................................................................................................. 6
+ 1   ......................................................................................................................................... 7
+ 2  PT  ............................................................................................................................... 9
+
+   2.1  ................................................................................................................................................ 9
+   2.2  ................................................................................................................................................ 9
+   2.3  ...................................................................................................................................................... 11
+ 3  FOLLOW ...................................................................................................................18
+   3.1  .............................................................................................................................................. 18
+   3.2  .............................................................................................................................................. 18
+   3.3  ...................................................................................................................................................... 22
+ 4  PVT ............................................................................................................................34
+   4.1  .............................................................................................................................................. 34
+   4.2  .............................................................................................................................................. 34
+   4.3  ...................................................................................................................................................... 42
+ 5  MOVE  ........................................................................................................................57
+   5.1  .............................................................................................................................................. 57
+   5.2  .............................................................................................................................................. 57
+ 6  FOLLOWEX ..............................................................................................................61
+   6.1  .............................................................................................................................................. 61
+   6.2  .............................................................................................................................................. 61
+ 7  .................................................................................................................................63
+ 8  ................................................................................................................................................88
+   8.1  .............................................................................................................................................. 88
+   8.2  .............................................................................................................................................. 89
+   8.3  .............................................................................................................................................. 90
+   8.4  .............................................................................................................................................. 90
+
+                                                                                                                       6© 2019 
+ 1 
+
+1 
+
+""" 7  
+""
+
+ GTN_FollowData
+GEN 
+
+
+GTN_PrfPt                         1-1 
+GTN_PtSpace
+GTN_PtData                    2  PT 
+
+GTN_PtClear                       2.1 
+                      PT 
+GTN_SetPtLoop         PT  FIFO 
+                      PT  FIFO 
+GTN_GetPtLoop         PT  FIFO 
+GTN_PtStart          
+GTN_SetPtMemory      
+GTN_GetPtMemory       PT 
+GTN_GetPtInfo        
+                      PT 
+GTN_PrfFollow        
+GTN_SetFollowMaster   PT 
+GTN_GetFollowMaster   PT 
+GTN_SetFollowLoop     PT 
+GTN_GetFollowLoop     PT 
+GTN_SetFollowEvent
+GTN_GetFollowEvent         3  Follow 
+GTN_FollowSpace                   3.1 
+GTN_FollowData
+GTN_FollowClear       Follow 
+GTN_FollowStart       Follow 
+GTN_FollowSwitch      Follow 
+                      Follow 
+                      Follow 
+                      Follow 
+                      Follow 
+                      Follow  FIFO 
+                      Follow  FIFO 
+                      Follow  FIFO 
+                     
+                      Follow 
+                      Follow  FIFO
+
+                                        7©2019 
+ 1 
+
+GTN_SetFollowMemory        Follow 
+
+GTN_GetFollowMemory        Follow 
+
+                           4  PVT 
+
+                          4.1 
+
+GTN_PrfPvt                 PVT 
+
+GTN_SetPvtLoop             PVT 
+
+GTN_GetPvtLoop             PVT 
+
+GTN_PvtTable               PVT  PVT 
+
+GTN_PvtTableComplete       PVT  Complete 
+                          
+
+GTN_PvtTablePercent        PVT  Percent 
+
+GTN_PvtPercentCalculate    PVT  Percent 
+
+GTN_PvtTableContinuous     PVT  Continuous 
+                          
+
+GTN_PvtContinuousCalculate  PVT  Continuous 
+
+GTN_PvtTableSelect         PVT 
+
+GTN_PvtStart               PVT 
+
+GTN_PvtStatus              PVT 
+
+                           5  Move 
+
+GTN_MoveAbsolute           MoveAbsolute 
+
+GTN_GetMoveAbsolute        MoveAbsolute 
+GTN_MoveAbsoluteEx         MoveAbsoluteEx 
+
+GTN_GetMoveAbsoluteEx      MoveAbsoluteEx 
+
+GTN_MoveVelocity           MoveVelocity 
+
+GTN_GetMoveVelocity        MoveVelocity 
+
+                           6  FollowEx 
+
+GTN_PrfFollowEx            FollowEx 
+
+GTN_FollowDataPercentEx    FollowEx  FIFO  S 
+
+GTN_FollowDataPercent2Ex   FollowEx  FIFO  S 
+
+GTN_GetFollowDataPercent2Ex  S 
+
+GTN_FollowSwitchNowEx     FollowEx  FIFO
+
+GTN_FollowDoBitEx          FollowEx  FIFO  DO 
+
+GTN_FollowDelayEx          FollowEx  FIFO 
+GTN_FollowDiBitEx          FollowEx  FIFO  DI 
+
+                                            8©2019 
+ 2  PT 
+
+2 PT 
+
+""" 7  "
+""
+
+ GTN_FollowData
+GEN 
+
+
+2.1 
+
+                      2-1PT 
+GTN_PrfPt
+GTN_PtSpace                                               
+GTN_PtData           PT 
+                     PT  FIFO 
+GTN_PtClear          PT  FIFO 
+                     PT  FIFO 
+GTN_SetPtLoop       
+                    
+GTN_GetPtLoop        PT 
+GTN_PtStart         
+GTN_SetPtMemory      PT 
+GTN_GetPtMemory     
+GTN_GetPtInfo        PT 
+                     PT 
+                     PT 
+                     PT 
+
+2.2 
+
+      PT ""
+ 2-1 
+
+                                                            9© 2019 
+ 2  PT 
+
+    
+
+P1         P2  P3 P4     P5
+
+T1         T2  T3  T4    T5  
+
+                                                      2-1PT 
+
+       5  1  0 T1  P1 1 
+
+ v1  2P1  2  v1 T2  P2 2 
+                    T1
+
+ v2  2P2  v1 345 PT 
+          T2
+
+ PT  1  0
+ 1 
+pulsems
+
+      PT 
+
+
+
+    (1)  PT 
+
+             GTN_PrfPt PT 
+
+    (2)  PT  PT  FIFO 
+
+             PT  3 
+
+             PT_SEGMENT_NORMAL FIFO  1  0 2 
+                  
+
+             PT_SEGMENT_EVEN FIFO =
+                  / 2-2 
+
+                       
+
+                          
+
+                2-2PT 
+
+                             10© 2019 
+ 2  PT 
+
+             PT_SEGMENT_STOP  0
+                   2-3 
+
+                        
+
+                           
+
+                                                2-3PT 
+
+         GTN_PtData(short profile, double pos, long time, short type, short fifo)
+               FIFO profile pos  time 
+              type fifo  FIFO 
+
+(3)  PT 
+
+        FIFO 
+        PT  GTN_SetPtLoop 
+
+(4) PT  FIFO
+
+        PT  2  FIFO  FIFO1  FIFO2PT  2  FIFO
+              
+
+         FIFO
+              FIFO  FIFO  GTN_PtClear
+               FIFO FIFO
+               FIFO
+
+         FIFO FIFO
+              PT  FIFO  FIFO 
+               FIFO PT  2  FIFO 
+               2  FIFO 
+               GTN_PtSpace 
+
+         GTN_SetPtMemory  FIFO  32  1024 
+               32 
+
+            PT  GTN_PrfPt FIFO """"
+            FIFO 
+
+2.3 
+
+     1. PT  FIFO
+
+       2-1PT  FIFO
+
+                             11© 2019 
+ 2  PT 
+
+       2-2 
+
+          2-2PT  FIFO 
+
+                                           
+                                            1024
+(pos)    1024   2048                        1024
+ (time)                                    
+          1024   1024
+                
+
+PT  2-4 
+
+                                   2-4PT 
+
+#include "stdafx.h"
+#include "conio.h"
+#include "gts.h"
+
+#define AXIS 1
+
+intmain(intargc, char* argv[])
+{
+
+     shortsRtn, space;
+     doublepos;
+     longtime;
+     longsts;
+     doubleprfPos, prfVel;
+
+     // 
+     sRtn = GTN_Open();
+     // 3-1
+     commandhandler("GTN_Open", sRtn);
+     // 
+     sRtn = GTN_Reset(1);
+     commandhandler("GTN_Reset", sRtn);
+     // 
+
+                                           12© 2019 
+ 2  PT 
+
+                  // 
+                  sRtn = GTN_LoadConfig(1,"test.cfg");
+                  commandhandler("GTN_LoadConfig", sRtn);
+                  // 
+                  sRtn =GTN_ClrSts(1,1, 8);
+                  commandhandler("GTN_ClrSts", sRtn);
+                  // 
+                  sRtn = GTN_AxisOn(1,AXIS);
+                  commandhandler("GTN_AxisOn", sRtn);
+                  // 
+                  sRtn = GTN_ZeroPos (1,AXIS);
+                  commandhandler("GTN_ZeroPos", sRtn);
+                  // AXISPT
+                  sRtn = GTN_PrfPt(1,AXIS);
+                  commandhandler("GTN_PrfPt", sRtn);
+                  // AXISFIFO
+                  sRtn = GTN_PtClear(1,AXIS);
+                  commandhandler("GTN_PtClear", sRtn);
+                  // PTFIFO
+                  sRtn = GTN_PtSpace(1,AXIS, &space);
+                  printf("GTN_PtSpace()=%d\tspace=%d\n", sRtn, space);
+                  // FIFO
+                  pos = 1024;
+                  time = 1024;
+                  sRtn = GTN_PtData(1,AXIS, pos, time);
+                  commandhandler("GTN_PtData", sRtn);
+                  // PTFIFO
+                  sRtn = GTN_PtSpace(1,AXIS, &space);
+                  printf("GTN_PtSpace()=%d\tspace=%d\n", sRtn, space);
+                  // FIFO
+                  pos += 2048;
+                  time += 1024;
+                  sRtn = GTN_PtData(1,AXIS, pos, time);
+                  commandhandler("GTN_PtData", sRtn);
+                  // PTFIFO
+                  sRtn = GTN_PtSpace(1,AXIS, &space);
+                  printf("GTN_PtSpace()=%d\tspace=%d\n", sRtn, space);
+                  // FIFO
+                  pos += 1024;
+                  time += 1024;
+                  sRtn = GTN_PtData(1,AXIS, pos, time);
+                  commandhandler("GTN_PtData", sRtn);
+                  // PT
+                  sRtn = GTN_PtStart(1,1<<(AXIS-1));
+                  commandhandler("GTN_PtStart", sRtn);
+
+                                                                                                                     13© 2019 
+ 2  PT 
+
+                  while(!kbhit())
+                  {
+
+                        // AXIS
+                        sRtn = GTN_GetSts (1,AXIS, &sts);
+                        // AXIS
+                        sRtn = GTN_GetPrfPos (1,AXIS, &prfPos);
+                        // AXIS
+                        sRtn = GTN_GetPrfVel (1,AXIS, &prfVel);
+                        printf("sts=0x%-10lxprfVel=%-10.2lfprfPos=%-10.1lf\r", sts, prfVel, prfPos);
+                  }
+
+                  // 
+                  sRtn = GTN_AxisOff(1,AXIS);
+                  printf("\nGTN_AxisOff()=%d\n", sRtn);
+                  getch();
+                  return 0;
+            }
+
+     2. PT  FIFO
+
+       2-2PT  FIFO
+
+       1s 2
+ 0.016s FIFO 
+ PT  FIFO  FIFO  FIFO 
+ FIFO  FIFO
+PT 
+ 2-5 
+
+                      2-5PT 
+
+#include "stdafx.h"
+#include "conio.h"
+#include "math.h"
+
+                              14© 2019 
+ 2  PT 
+
+            #include "gts.h"
+
+#define AXIS                  1                // 
+#define A                           50         // 
+#define T                           1    // 
+#define DELTA                                  // 
+#define LOOP                  0.016
+#define PI                          2
+
+                              3.1415926
+
+intmain(intargc, char* argv[])
+{
+
+     shortsRtn, space;
+     doublepos, vel, velPre, time;
+     longsts;
+     doubleprfPos, prfVel;
+     shortstart, loop;
+
+// 
+sRtn = GTN_Open ();
+// 3-1
+commandhandler("GTN_Open ", sRtn);
+// 
+sRtn = GTN_Reset (1);
+// 
+// 
+sRtn = GTN_LoadConfig (1,"test.cfg");
+commandhandler("GTN_LoadConfig ", sRtn);
+// 
+sRtn =GTN_ClrSts (1,1, 8);
+commandhandler("GTN_ClrSts", sRtn);
+// 
+sRtn = GTN_AxisOn (1,AXIS);
+commandhandler("GTN_AxisOn", sRtn);
+// 
+sRtn = GTN_ZeroPos (1,AXIS);
+commandhandler("GTN_ZeroPos", sRtn);
+// AXISPT
+sRtn = GTN_PrfPt(1,AXIS, PT_MODE_DYNAMIC);
+commandhandler("GTN_PrfPt", sRtn);
+// AXISFIFO
+sRtn = GTN_PtClear(1,AXIS);
+commandhandler("GTN_PtClear", sRtn);
+pos = 0;
+vel = velPre = 0;
+time = 0;
+start = 0;
+
+                                                    15© 2019 
+ 2  PT 
+
+                  loop = 1;
+                  while(1)
+                  {
+
+                        // PTFIFO
+                        sRtn = GTN_PtSpace(1,AXIS, &space);
+                        if( space> 0 )
+                        {
+
+                              time += DELTA;
+                              // 
+                              vel = A*sin((2*PI)/T*time);
+                              // 
+                              pos += 1000*(vel+velPre)*DELTA/2;
+                              velPre = vel;
+                              if(time<loop*T)
+                              {
+
+                                    // 
+                                    sRtn = GTN_PtData(1,AXIS, pos, (long)(time*1000));
+                                    if( 0 != sRtn )
+                                    {
+
+                                          printf("\nGTN_PtData()=%d\n", sRtn);
+                                          getch();
+                                          return 1;
+                                    }
+                              }
+                              else
+                              {
+                                    // 
+                                    sRtn = GTN_PtData(1,AXIS, 0, loop*T*1000, PT_SEGMENT_STOP);
+                                    if( 0 != sRtn )
+                                    {
+                                          printf("\nGTN_PtData()=%d\n", sRtn);
+                                          getch();
+                                          return 1;
+                                    }
+                                    pos = 0;
+                                    time = loop*T;
+                                    velPre = 0;
+                                    ++loop;
+                                    if( loop>LOOP )
+                                    {
+                                          break;
+                                    }
+                              }
+                        }
+                        elseif( 0 == start )
+                        {
+
+                                                                                                                     16© 2019 
+ 2  PT 
+
+                              // PT
+                              sRtn = GTN_PtStart(1,1<<(AXIS-1));
+                              commandhandler("GTN_PtStart", sRtn);
+                              start = 1;
+                        }
+                        // AXIS
+                        sRtn =GTN_GetSts (1,AXIS, &sts);
+                        // AXIS
+                        sRtn = GTN_GetPrfPos (1,AXIS, &prfPos);
+                        // AXIS
+                        sRtn = GTN_GetPrfVel (1,AXIS, &prfVel);
+                        printf("sts=0x%-10lxprfVel=%-10.2lfprfPos=%-10.1lf\r", sts, prfVel, prfPos);
+                  }
+
+                  while(!kbhit())
+                  {
+
+                        // AXIS
+                        sRtn = GTN_GetSts (1,AXIS, &sts);
+                        // AXIS
+                        sRtn = GTN_GetPrfPos (1,AXIS, &prfPos);
+                        // AXIS
+                        sRtn = GTN_GetPrfVel (1,AXIS, &prfVel);
+                        printf("sts=0x%-10lxprfVel=%-10.2lfprfPos=%-10.1lf\r", sts, prfVel, prfPos);
+                  }
+                  // 
+                  sRtn =GTN_AxisOff(1,AXIS);
+                  printf("\nGTN_AxisOff()=%d\n", sRtn);
+                  getch();
+                  return 0;
+            }
+
+                                                                                                                     17© 2019 
+ 3  Follow 
+
+3 Follow 
+
+""" 7  "
+""
+
+ GTN_FollowData
+GEN 
+
+
+3.1 
+
+                       3-1Follow 
+GTN_PrfFollow
+GTN_SetFollowMaster                                            
+GTN_GetFollowMaster       Follow 
+GTN_SetFollowLoop         Follow 
+GTN_GetFollowLoop         Follow 
+GTN_SetFollowEvent        Follow 
+GTN_GetFollowEvent        Follow 
+GTN_FollowSpace           Follow 
+GTN_FollowData            Follow 
+                          Follow  FIFO 
+GTN_FollowClear           Follow  FIFO 
+                          Follow  FIFO 
+GTN_FollowStart          
+GTN_FollowSwitch          Follow 
+GTN_SetFollowMemory       Follow  FIFO
+GTN_GetFollowMemory       Follow 
+                          Follow 
+
+3.2 
+
+      
+ 3-1 
+
+                      18© 2019 
+ 3  Follow                           
+
+              y/
+         Vs/Vm
+
+           1.5
+                                   
+
+                          
+           1
+
+0
+               50 1000 1500 2000 250 300 3500 4000 x /Sm
+
+0  0  3-1Follow 0 0
+
+       Follow  x  y  Vs 
+ Vm  Sm*(Vs/Vm):Vs*(Sm/Vm)=Vs*t 3-1 
+
+
+(1) 1000pulse
+
+(2)  1500pulse  250 ( (1500-1000)*1/2 )pulse 
+       
+
+(3)  2250pulse 
+       
+
+
+
+
+
+      Follow 
+ Follow  Follow 
+ FIFO Follow 
+
+(1)  Follow 
+
+ GTN_PrfFollow Follow 
+Follow 
+
+(2) 
+
+ GTN_SetFollowMasterprofile masterIndex 
+
+
+
+(3) 
+       
+
+                                                                                                                19© 2019 
+ 3  Follow 
+
+             GTN_FollowStart  GTN_FollowStart 
+            
+            GTN_SetFollowEvent 
+    (4)  Follow 
+             FIFO 
+             Follow  GTN_SetFollowLoop 
+    (5)  Follow  Follow  FIFO 
+                GTN_FollowData(short core, short profile, long masterSegment, double
+            slaveSegment, short type= FOLLOW_SEGMENT_NORMAL, short fifo)
+             FIFO profile masterSegment  slaveSegment 
+            type fifo  FIFO 
+
+                
+                
+
+             Follow  4 
+             FOLLOW_SEGMENT_NORMAL FIFO  1  0
+
+                   2 
+             FOLLOW_SEGMENT_EVEN FIFO 
+
+                  
+             FOLLOW_SEGMENT_STOP  0
+
+                  
+             FOLLOW_SEGMENT_CONTINUE FIFO 
+
+                   FIFO  2 
+                  
+            
+            
+    (6)  FIFO
+            Follow  2  FIFO 2  FIFO 
+             FIFO  3-2 
+
+                                                                                                                     20© 2019 
+ 3  Follow                         FIFO2
+
+                    FIFO1
+
+       1                                      2 
+ FIFO1
+
+    3 
+
+
+FIFO1                      FIFO2             FIFO1
+
+                              4                     
+
+                            3-2Follow  FIFO
+
+"
+ 1"" 3""
+ 2"" 2"" 1""
+ 2"" 3"" 4"" 1""
+ 2"" 3"
+
+
+
+a) " 1" FIFO1 " 2" FIFO2 
+       FIFO1 GTN_FollowSwitch FIFO1 
+       FIFO2  FIFO1 
+
+ 2  FIFO  FIFO2 
+GTN_FollowData  FOLLOW_SEGMENT_CONTINUE
+
+                                                    21© 2019 
+ 3  Follow 
+
+            b)  FIFO2  GTN_FollowSpace  FIFO1 
+                  " 3" FIFO1 
+                  GTN_FollowSwitch FIFO2 
+                  FIFO1  FIFO2 
+
+            " 3-3Follow  FIFO "
+
+3.3 
+
+     1. 
+
+       3-1  follow 
+
+      
+
+      
+
+10000pulse8000pulse 3-3 
+
+          
+
+        
+
+            
+
+          
+
+            
+
+                                                           3-3 
+
+       Follow 
+
+      
+""
+ 10000pulse 
+ 8000pulse
+
+       2500 
+
+      
+
+
+
+       3-4 
+
+            22© 2019 
+ 3  Follow 
+
+                                
+ Vs/Vm                          
+
+    
+
+1
+
+0.6                    2         3                    ...... ......
+             1                   2
+                                                            Sm/pulse
+   0         5000 6000 9000 11000 14000 15000 ......        
+
+                                           3-4  Follow 
+
+       Jog  Follow 
+ 1 2
+ 3 2
+
+
+       2 
+
+
+
+
+
+
+       1  2  1 
+ 2  1 
+ FIFO 2  FIFO
+
+       1 5000pulse  2500pulse 3-2
+ 0 
+
+                              3-2  1                  (pulse)
+                                                            5000
+                                                            2500
+             
+
+       2 5 
+
+ 3-3 
+ 5000pulse
+
+                 3-3  2 
+
+                                                                  
+                                                       9000       10000
+                1000      4000  6000
+
+                                                      23© 2019 
+ 3  Follow                                          
+                  1000          3400   4600   7000   8000
+                  1000          3000   2000   3000   1000
+                  1000          2400   1200   2400   1000
+      
+
+1. 
+
+2.  Follow  GTN_FollowStart 
+       FOLLOW_EVENT_PASS
+      
+
+3.  FIFO FIFO 
+
+2. Follow  FIFO
+
+ 3-2Follow  FIFO 
+
+       Jog  50pulse/ms Follow 
+ 50000pulse  3 
+ 3-4 
+ 3-5Follow  FIFO  3-6Follow  FIFO
+
+
+                    3-4Follow  FIFO 
+
+                                                    
+                                                    20000
+                        20000         20000         10000
+
+                        10000         20000
+
+                  3-5Follow  FIFO 
+                                                                                        24© 2019 
+ 3  Follow 
+
+                      3-6Follow  FIFO 
+
+#include "stdafx.h"
+#include "conio.h"
+#include "gts.h"
+
+#define MASTER       1
+
+#define SLAVE        2
+
+intmain(intargc, char* argv[])
+{
+
+     shortsRtn;
+     doubleprfVel[8];
+     TJogPrmjog;
+     shortspace;
+     longmasterPos;
+     doubleslavePos;
+     longloop;
+
+// 
+sRtn = GTN_Open();
+// 3-1
+commandhandler("GTN_Open", sRtn);
+// 
+sRtn = GTN_Reset(1);
+commandhandler("GTN_Reset", sRtn);
+// 
+//  test.cfg 
+sRtn = GTN_LoadConfig(1,"test.cfg");
+commandhandler("GTN_LoadConfig", sRtn);
+// 
+sRtn =GTN_ClrSts (1,1, 8);
+commandhandler("GTN_ClrSts", sRtn);
+// 
+
+                                         25© 2019 
+ 3  Follow 
+
+                  sRtn = GTN_AxisOn (1,MASTER);
+                  commandhandler("GTN_AxisOn", sRtn);
+                  sRtn = GTN_AxisOn (1,SLAVE);
+                  commandhandler("GTN_AxisOn", sRtn);
+                  // 
+                  sRtn = GTN_ZeroPos (1,MASTER);
+                  commandhandler("GTN_ZeroPos", sRtn);
+                  sRtn =GTN_ZeroPos (1,SLAVE);
+                  commandhandler("GTN_ZeroPos", sRtn);
+                  //  Jog 
+                  sRtn = GTN_PrfJog (1,MASTER);
+                  commandhandler("GTN_PrfJog", sRtn);
+                  // 
+                  sRtn =GTN_GetJogPrm (1,MASTER, &jog);
+                  commandhandler("GTN_GetJogPrm", sRtn);
+                  jog.acc = 1;
+                  sRtn = GTN_SetJogPrm (1,MASTER, &jog);
+                  commandhandler("GTN_SetJogPrm", sRtn);
+                  sRtn = GTN_SetVel (1,MASTER, 50);
+                  commandhandler("GTN_SetVel", sRtn);
+                  // 
+                  sRtn = GTN_Update (1,1<<(MASTER-1));
+                  commandhandler("GTN_Update", sRtn);
+                  //  Follow 
+                  sRtn = GTN_PrfFollow(1,SLAVE);
+                  commandhandler("GTN_PrfFollow", sRtn);
+                  //  FIFO
+                  sRtn =GTN_FollowClear(1,SLAVE);
+                  commandhandler("GTN_FollowClear", sRtn);
+                  // 
+                  sRtn = GTN_SetFollowMaster(1,SLAVE, MASTER);
+                  commandhandler("GTN_SetFollowMaster", sRtn);
+                  //  Follow 
+                  sRtn = GTN_FollowSpace(1,SLAVE, &space);
+                  printf("GTN_FollowSpace()=%d space=%d\n", sRtn, space);
+                  //  FIFO 
+                  masterPos = 20000;
+                  slavePos = 10000;
+                  sRtn = GTN_FollowData(1,SLAVE, masterPos, slavePos);
+                  commandhandler("GTN_FollowData", sRtn);
+                  //  Follow 
+                  sRtn = GTN_FollowSpace(1,SLAVE, &space);
+                  printf("GTN_FollowSpace()=%d space=%d\n", sRtn, space);
+                  //  FIFO 
+                  masterPos+= 20000;
+                  slavePos += 20000;
+
+                                                                                                                     26© 2019 
+ 3  Follow 
+
+                  sRtn = GTN_FollowData(1,SLAVE, masterPos, slavePos);
+                  commandhandler("GTN_FollowData",sRtn);
+                  //  Follow 
+                  sRtn = GTN_FollowSpace(1,SLAVE, &space);
+                  printf("GTN_FollowSpace()=%d space=%d\n", sRtn, space);
+                  //  FIFO 
+                  masterPos += 20000;
+                  slavePos += 10000;
+                  sRtn = GTN_FollowData(1,SLAVE, masterPos, slavePos);
+                  commandhandler("GTN_FollowData", sRtn);
+                  // 
+                  sRtn = GTN_SetFollowLoop(1,SLAVE, 0);
+                  commandhandler("GTN_SetFollowLoop", sRtn);
+                  // 
+                  sRtn = GTN_SetFollowEvent(1,SLAVE, FOLLOW_EVENT_PASS, 1, 50000);
+                  commandhandler("GTN_SetFollowEvent", sRtn);
+                  //  Follow 
+                  sRtn = GTN_FollowStart(1,1<<(SLAVE-1));
+                  commandhandler("GTN_FollowStart", sRtn);
+
+                  while(!kbhit())
+                  {
+
+                        // 
+                        sRtn = GTN_GetPrfVel (1,1, prfVel, 8);
+                        // 
+                        sRtn = GTN_GetFollowLoop(SLAVE, &loop);
+                        printf("master=%-10.2lf\tslave=%-10.2lf\tloop=%d\r",
+
+                              prfVel[MASTER-1], prfVel[SLAVE-1], loop);
+                  }
+
+                  // 
+                  sRtn = GTN_AxisOff(1,MASTER);
+                  printf("\nGTN_AxisOff()=%d, Axis:%d\n", sRtn, MASTER);
+                  sRtn = GTN_AxisOff(1,SLAVE);
+                  printf("\nGTN_AxisOff()=%d\n", sRtn, SLAVE);
+                  getch();
+                  return 0;
+            }
+
+     3. Follow  FIFO 
+
+       3-3Follow  FIFO 
+
+       Jog  50pulse/ms Follow 
+ GTN_FollowStart 
+
+
+                                                                                                                     27© 2019 
+ 3  Follow 
+
+ 3-5  FIFO1  3-6  FIFO2 
+ FIFO2 FIFO1  3-7  FIFO1
+ FIFO1  FIFO 
+ 3-7  3-8 
+
+   3-5Follow  FIFO 
+
+                     
+                     20000
+  20000  20000       10000
+
+  10000  20000
+
+   3-6Follow  FIFO 
+
+                     
+                     20000
+  20000  20000       16000
+
+  10000  20000
+
+   3-7Follow  FIFO 
+
+                     
+                     20000
+  20000  20000       16000
+
+  16000  20000
+
+   3-7Follow  FIFO 
+                                                                         28© 2019 
+ 3  Follow 
+
+                      3-8Follow  FIFO 
+
+#include "stdafx.h"
+#include "conio.h"
+#include "gts.h"
+
+#define MASTER                  1
+
+#define SLAVE                   2
+
+#define STAGE_FIFO1             1
+
+#define STAGE_TO_FIFO2          2
+
+#define STAGE_TO_FIFO1          3
+
+#define STAGE_END               4
+
+intmain(intargc, char* argv[])
+{
+
+     shortsRtn;
+     doubleprfVel[8];
+     TJogPrmjog;
+     shortspace;
+     longmasterPos;
+     doubleslavePos;
+     shortstage, pressKey;
+
+// 
+sRtn = GTN_Open();
+// 3-1
+commandhandler("GTN_Open", sRtn);
+// 
+sRtn = GTN_Reset (1);
+commandhandler("GTN_Reset ", sRtn);
+// 
+// test.cfg
+sRtn = GTN_LoadConfig (1,"test.cfg");
+
+                                        29© 2019 
+ 3  Follow 
+
+                  commandhandler("GTN_LoadConfig ", sRtn);
+                  // 
+                  sRtn =GTN_ClrSts(1,1, 8);
+                  commandhandler("GTN_ClrSts", sRtn);
+                  // 
+                  sRtn =GTN_AxisOn (1,MASTER);
+                  commandhandler("GTN_AxisOn", sRtn);
+                  sRtn = GTN_AxisOn (1,SLAVE);
+                  commandhandler("GTN_AxisOn", sRtn);
+                  // 
+                  sRtn = GTN_ZeroPos (1,MASTER);
+                  commandhandler("GTN_ZeroPos", sRtn);
+                  sRtn = GTN_ZeroPos (1,SLAVE);
+                  commandhandler("GTN_ZeroPos", sRtn);
+                  // Jog
+                  sRtn = GTN_PrfJog (1,MASTER);
+                  commandhandler("GTN_PrfJog", sRtn);
+                  // 
+                  sRtn = GTN_GetJogPrm (1,MASTER, &jog);
+                  commandhandler("GTN_GetJogPrm", sRtn);
+                  jog.acc = 1;
+                  sRtn = GTN_SetJogPrm (1,MASTER, &jog);
+                  commandhandler("GTN_SetJogPrm", sRtn);
+                  sRtn = GTN_SetVel (1,MASTER, 50);
+                  commandhandler("GTN_SetVel", sRtn);
+                  // 
+                  sRtn = GTN_Update (1,1<<(MASTER-1));
+                  commandhandler("GTN_Update", sRtn);
+                  // Follow
+                  sRtn = GTN_PrfFollow(1,SLAVE);
+                  commandhandler("GTN_PrfFollow", sRtn);
+                  // FIFO1
+                  sRtn =GTN_FollowClear(1,SLAVE, 0);
+                  commandhandler("GTN_FollowClear", sRtn);
+                  // FIFO2
+                  sRtn =GTN_FollowClear(1,SLAVE, 1);
+                  commandhandler("GTN_FollowClear", sRtn);
+                  // 
+                  sRtn = GTN_SetFollowMaster(1,SLAVE, MASTER);
+                  commandhandler("GTN_SetFollowMaster", sRtn);
+                  // FollowFIFO1
+                  sRtn = GTN_FollowSpace(1,SLAVE, &space, 0);
+                  printf("GTN_FollowSpace()=%d space=%d\n", sRtn, space);
+                  // FIFO1
+                  masterPos = 20000;
+                  slavePos = 10000;
+
+                                                                                                                     30© 2019 
+ 3  Follow 
+
+                 sRtn=GTN_FollowData(1,SLAVE, masterPos, slavePos, FOLLOW_SEGMENT_NORMAL,
+
+      0);
+
+                  commandhandler("GTN_FollowData", sRtn);
+                  // FollowFIFO1
+                  sRtn = GTN_FollowSpace(1,SLAVE, &space, 0);
+                  printf("GTN_FollowSpace()=%d space=%d\n", sRtn, space);
+                  // FIFO1
+                  masterPos += 20000;
+                  slavePos += 20000;
+                 sRtn = GTN_FollowData(1,SLAVE, masterPos, slavePos, FOLLOW_SEGMENT_NORMAL,
+
+      0);
+
+                  commandhandler("GTN_FollowData", sRtn);
+                  // FollowFIFO1
+                  sRtn =GTN_FollowSpace(1,SLAVE, &space, 0);
+                  printf("GTN_FollowSpace()=%d space=%d\n", sRtn, space);
+                  // FIFO1
+                  masterPos += 20000;
+                  slavePos += 10000;
+                 sRtn =GTN_FollowData(1,SLAVE, masterPos, slavePos, FOLLOW_SEGMENT_NORMAL,
+
+      0);
+
+                  commandhandler("GTN_FollowData", sRtn);
+                  // 
+                  sRtn = GTN_SetFollowLoop(1,SLAVE, 0);
+                  commandhandler("GTN_SetFollowLoop", sRtn);
+
+                  // 
+                  sRtn = GTN_SetFollowEvent(1,SLAVE, FOLLOW_EVENT_START, 1);
+                  commandhandler("GTN_SetFollowEvent", sRtn);
+                  // Follow
+                  sRtn = GTN_FollowStart(1,1<<(SLAVE-1));
+                  commandhandler("GTN_FollowStart", sRtn);
+                  stage = STAGE_FIFO1;
+                  pressKey = 0;
+
+                  while(1)
+                  {
+
+                        // 
+                        if(kbhit())
+                        {
+
+                              getch();
+                              pressKey = 1;
+                        }
+                        // FIFO1FIFO2
+                        if( STAGE_FIFO1 == stage )
+                        {
+                              if( 1 == pressKey )
+
+                                                                                                                     31© 2019 
+ 3  Follow                       pressKey = 0;
+                                 stage = STAGE_TO_FIFO2;
+                              {  // FIFO2
+                                 sRtn = GTN_FollowClear(1,SLAVE, 1);
+                              }  masterPos = 20000;
+                        }        slavePos = 10000;
+                                 sRtn =GTN_FollowData(1,SLAVE, masterPos, slavePos,
+
+                                             FOLLOW_SEGMENT_CONTINUE, 1);
+                                 masterPos+= 20000;
+                                 slavePos += 20000;
+                                 sRtn =GTN_FollowData(1,SLAVE, masterPos, slavePos,
+
+                                             FOLLOW_SEGMENT_NORMAL, 1);
+                                 masterPos+= 20000;
+                                 slavePos += 16000;
+                                 sRtn =GTN_FollowData(1,SLAVE, masterPos, slavePos,
+
+                                             FOLLOW_SEGMENT_NORMAL, 1);
+                                 // FIFO2
+                                 // FIFOFIFO
+                                 sRtn =GTN_FollowSwitch(1,1<<(SLAVE-1));
+
+//  FIFO1  FIFO1 
+ FIFO1 
+if( STAGE_TO_FIFO2 == stage )
+{
+
+      //  FIFO1 
+      GTN_FollowSpace(1,SLAVE, &space, 0);
+      //  FIFO1  FIFO2
+      if( 16 == space )
+      {
+
+            stage = STAGE_TO_FIFO1;
+            masterPos = 20000;
+            slavePos = 16000;
+            sRtn =GTN_FollowData(1,SLAVE, masterPos, slavePos,
+
+                        FOLLOW_SEGMENT_CONTINUE, 0);
+            masterPos+= 20000;
+            slavePos += 20000;
+            sRtn =GTN_FollowData(1,SLAVE, masterPos, slavePos,
+
+                        FOLLOW_SEGMENT_NORMAL, 0);
+            masterPos+= 20000;
+            slavePos += 16000;
+            sRtn =GTN_FollowData(1,SLAVE, masterPos, slavePos,
+
+                        FOLLOW_SEGMENT_NORMAL, 0);
+            //  FIFO1
+
+                                                                                         32© 2019 
+ 3  Follow                       //  FIFO  FIFO
+                                 sRtn =GTN_FollowSwitch(1,1<<(SLAVE-1));
+                              }
+                        }
+
+if( STAGE_TO_FIFO1 == stage )
+{
+
+      //  FIFO2 
+GTN_FollowSpace(1,SLAVE, &space, 1);
+
+      //  FIFO2  FIFO1
+      if( 16 == space )
+      {
+
+            stage = STAGE_END;
+      }
+}
+
+// 
+sRtn = GTN_GetPrfVel (1,1, prfVel, 8);
+printf("master=%-10.2lf\tslave=%-10.2lf\r",
+
+      prfVel[MASTER-1], prfVel[SLAVE-1]);
+
+      if( STAGE_END == stage )
+      {
+
+            if( 1 == pressKey )
+            {
+
+                  pressKey = 0;
+                  break;
+            }
+      }
+}
+
+     // 
+     sRtn = GTN_AxisOff(1,MASTER);
+     printf("\nGTN_AxisOff()=%d, Axis:%d\n", sRtn, MASTER);
+     sRtn = GTN_AxisOff(1,SLAVE);
+     printf("\nGTN_AxisOff()=%d\n", sRtn, SLAVE);
+     getch();
+     return 0;
+}
+
+                                                                          33© 2019 
+ 4  PVT 
+
+4 PVT 
+
+""" 7  "
+""
+
+ GTN_FollowData
+GEN 
+
+
+4.1 
+
+                               4-1PVT 
+GTN_PrfPvt
+GTN_SetPvtLoop                                                     
+GTN_GetPvtLoop               PVT 
+GTN_PvtTable                 PVT 
+GTN_PvtTableComplete         PVT 
+GTN_PvtTablePercent          PVT  PVT 
+GTN_PvtPercentCalculate      PVT  Complete 
+                             PVT  Percent 
+GTN_PvtTableContinuous       PVT  Percent 
+                             PVT  Continuous 
+GTN_PvtContinuousCalculate  
+GTN_PvtTableSelect           PVT  Continuous 
+GTN_PvtStart                 PVT 
+GTN_PvtStatus                PVT 
+                             PVT 
+
+4.2 
+
+      PVT ""
+
+
+                                                 p  at3  bt2  ct  d
+
+                                               v  dp  3at2  2bt  c
+                                                     dt
+
+       2 ""
+
+                            34© 2019 
+ 4  PVT 
+
+                  3aat13t12b2t12bt1  ct1  d   p1
+                                      c  v1
+                  at23  bt22  ct2  d  p2
+
+                  3at22  2bt2  c  v2
+
+       abcd 2 
+
+       32  1024 
+
+
+        GTN_PvtTable  GTN_PvtTableComplete  GTN_PvtTablePercent 
+GTN_PvtTableContinuous 
+
+
+       GTN_PvtTableSelect 
+
+
+       GTN_PvtStart  0 0 
+
+
+       GTN_SetPvtLoop  0 
+ 0
+
+       4-2  4  PVT 
+
+                   4-2  PVT 
+
+          ms                     pulse            pulse/ms
+  P1                                                         0
+  P2      1, 000                     0                      10
+  P3                                                        10
+  P4      2, 000                 5, 000                      0
+
+          3, 000                 15, 000
+
+          4, 000                 20, 000
+
+        GTN_PrfPvt  PVT 
+        GTN_PvtTable  4 
+        GTN_SetPvtLoop 
+        GTN_PvtStart 
+       P1  1000  GTN_PvtStart  1000 
+ P4  P1 4-1 
+
+      v
+                          P2 P3
+
+      10
+
+          P1                     P4
+
+      0 1000 2000 3000 4000 5000 6000 7000 8000 t
+                                   4-1 
+
+PVT  4 PVTCompletePercent  Continuous
+
+                                                                                                              35© 2019 
+ 4  PVT 
+
+
+
+     1. PVT 
+
+      PVT "" 2 
+ 3  2 "
+" 4-3  4  PVT 
+
+
+             4-3PVT 
+
+            ms      pulse    pulse/ms
+   1    P1                              0
+   2    P2  0       0                  10
+   3    P3                             10
+   4    P4  1, 000  5, 000              0
+        P1                              0
+        P2  2, 000  15, 000             9
+        P3                              9
+        P4  3, 000  20, 000             0
+        P1                              0
+        P2  0       0                  7.5
+        P3                             7.5
+        P4  1, 000  5, 000              0
+        P1                              0
+        P2  2, 000  15, 000
+        P3                          6.6669
+        P4  3, 000  20, 000         6.6669
+
+            0       0                   0
+
+            1, 000  5, 000
+
+            2, 333  15, 000
+
+            3, 333  20, 000
+
+            0       0
+
+            750     1, 667
+
+            2, 250  18, 333
+
+            3, 000  20, 000
+
+ 4  4-2  PVT 
+
+                             36© 2019 
+ 4  PVT 
+
+               4-2  PVT 
+
+      PVT ""
+ 4-4
+ 2 
+
+               4-4  PVT 
+
+              ms      pulse    pulse/ms
+   1                                      0
+          P1  0       0                  15
+   2                                     15
+          P2  1, 000  5, 000              0
+                                          0
+          P3  2, 000  15, 000             5
+                                          5
+          P4  3, 000  20, 000             0
+
+          P1  0       0
+
+          P2  1, 000  5, 000
+
+          P3  2, 000  15, 000
+
+          P4  3, 000  20, 000
+
+ 2  4-3 
+
+                               37© 2019 
+ 4  PVT 
+
+                                            4-3  PV 
+
+     2. Complete 
+
+      Complete ""Complete 
+""
+ 4-5  Complete 
+
+
+           4-5Complete 
+
+          ms      pulse    pulse/ms
+  P1                                  0
+  P2      0       0
+  P3                               
+  P4      1, 000  5, 000           
+
+          2, 000  15, 000             0
+
+          3, 000  20, 000
+
+ 4-4 
+
+                                              4-4Complete 
+
+      Complete 
+P=50000sin2 (/2000*t)[0, 2000] 5  4-6
+
+                                                                                                                     38© 2019 
+ 4  PVT 
+
+
+
+           4-6Complete 
+
+          ms      pulse    pulse/ms
+  P1                                  0
+  P2      0       0
+  P3                               
+  P4      500     25, 000          
+  P5                               
+          1, 000  50, 000
+                                      0
+          1, 500  25, 000
+
+          2, 000  0
+
+ 4-5 
+
+                                        4-5Complete 
+       P=50000sin2 (/2000*t) 4-6  5
+1050 
+
+                          4-6Complete  51050 
+
+     3. Percent 
+
+      Percent ""Percent 
+Percent  2 
+
+                                                                                                                     39© 2019 
+ 4  PVT 
+
+""
+
+
+              vi 1    2( pi1  pi )   vi
+                        ti1  ti
+
+      ""
+""" 2 
+" 4-7 
+
+               4-7Percent 
+
+       P1  P2  P1  0 P2  P3 
+ P2  0 P3  P4  2ta 2ta+te
+ P3  2ta/(2ta+te)*100%
+
+      "" P3 
+0  P3  P4  P3  0  P3  P4
+
+
+ 4-7  Percent 
+
+               4-7 Percent 
+
+      ms            pulse                        pulse/ms
+  P1                                                        0
+  P2     0               0               t 60
+  P3  1, 000          5, 000                  0          
+  P4                                                     
+      2, 000          15, 000            100             
+
+      3, 000          20, 000            0
+
+ 4-8 
+
+                                                 40© 2019 
+ 4  PVT 
+
+                                            4-8 Percent 
+
+     4. Continuous 
+
+      Continuous ""
+ 2 
+
+
+       Pi  Pi  Pi+1  Pi 
+ Pi  Pi+1  Pi  Pi 
+Pi+1  Pi  Pi  Pi+1 
+
+
+       2  2  4-9 
+
+
+                                             4-9Continuous 
+ 4-8  Continuous 
+
+                                                             41© 2019 
+ 4  PVT 
+
+                4-8 Continuous 
+
+                                         
+   1    P1                         0.01    60
+        P2  0        0  10  0.01   0.01     0
+   2    P1                         0.01    60
+        P2  20, 000  0  10  0.01   0.02     0
+        P3                         0.02     0
+            0        0  10  0.01
+
+            19, 800  2  2   0.02
+
+            21, 800  0  2   0.02
+
+ 2  4-10 
+
+                                         4-10Continuous 
+
+4.3 
+
+     1. PVT 
+
+       4-11  5 
+ 0
+
+
+                                                                                                                     42© 2019 
+ 4  PVT 
+
+                       4-11PVT 
+
+ 4-9 
+
+                             4-9PVT 
+
+          ms                   pulse                      pulse/ms
+  P1                                                                 1
+  P2           0               0
+  P3                                                              15.25
+  P4          1, 200           9, 750                               20
+  P5                                                                20
+  P6          2, 000           24, 483
+                                                                  15.25
+              3, 000           44, 483                               1
+
+              3, 800           59, 216
+
+              5, 000           68, 966
+
+ 4-1PVT 
+
+      #include "stdafx.h"
+
+      #include "conio.h"
+      #include "windows.h"
+      #include "gts.h"
+
+#define AXIS                1
+
+#define TABLE               1
+
+intmain(intargc, char* argv[])
+{
+
+     shortsRtn;
+     longmask;
+     // X
+     doubletime[6]={0, 1200, 2000, 3000, 3800, 5000};
+     doublepos[6]={0, 9750, 24483, 44483, 59216, 68966};
+
+                                                          43© 2019 
+ 4  PVT 
+
+                  doublevel[6]={1, 15.25, 20, 20, 15.25, 1};
+                  doubleprfVel, prfPos, t;
+                  shorttableId;
+
+                  // 
+                  sRtn = GTN_Open ();
+                  commandhandler("GTN_Open ", sRtn);
+                  // 
+                  sRtn = GTN_Reset (1);
+                  commandhandler("GTN_Reset ", sRtn);
+                  // 
+                  // 
+                  sRtn = GTN_LoadConfig (1,"test.cfg");
+                  commandhandler("GTN_LoadConfig ", sRtn);
+                  // 
+                  sRtn =GTN_ClrSts (1,1, 8);
+                  commandhandler("GTN_ClrSts", sRtn);
+                  sRtn = GTN_AxisOn (1,AXIS);
+                  commandhandler("GTN_AxisOn", sRtn);
+                  // 
+                  Sleep(1000);
+                  // PVT
+                  sRtn = GTN_PrfPvt(1,AXIS);
+                  commandhandler("GTN_PrfPvt", sRtn);
+                  // 
+                  sRtn = GTN_PvtTable(1,TABLE, 6, &time[0], &pos[0], &vel[0]);
+                  commandhandler("GTN_PvtTable", sRtn);
+                  // 
+                  sRtn = GTN_PvtTableSelect(1,AXIS, TABLE);
+                  commandhandler("GTN_PvtTableSelect", sRtn);
+                  mask = 1<<(AXIS-1);
+                  sRtn = GTN_PvtStart(1,mask);
+                  commandhandler("GTN_PvtStart", sRtn);
+                  while(!kbhit())
+                  {
+
+                        // 
+                        sRtn = GTN_PvtStatus(1,AXIS, &tableId, &t);
+                        // 
+                        sRtn = GTN_GetPrfVel (1,AXIS, &prfVel);
+                        // 
+                        sRtn =GTN_GetPrfPos (1,AXIS, &prfPos);
+                        printf("%2d %10.0lf %10.2lf %10.1lf\r", tableId, t, prfVel, prfPos);
+                  }
+                  // 
+                  sRtn = GTN_AxisOff(1,AXIS);
+                  printf("\nGTN_AxisOff()=%d\n", sRtn);
+
+                                                                                                                     44© 2019 
+ 4  PVT 
+
+                  getch();
+                  return 0;
+            }
+
+     2. Complete 
+
+       P=40000sin2 (/2000*t)
+ A  50% B  50%Complete  4-12 
+
+                 4-12 Complete 
+
+ 4-2Complete 
+
+      #include "stdafx.h"
+
+      #include "conio.h"
+      #include "windows.h"
+      #include "math.h"
+      #include "stdlib.h"
+      #include "gts.h"
+
+#define AXIS    1
+#define TABLE1  1
+#define TABLE2  2
+#define PI      3.1415926
+
+voidCalculate(doubleamplitude, longn, double *pTime, double *pPos)
+{
+
+     longi;
+     for(i=0;i<n;++i)
+     {
+
+           pPos[i] = amplitude*sin(PI/2000*pTime[i])*sin(PI/2000*pTime[i]);
+     }
+}
+
+                                                                                                       45© 2019 
+ 4  PVT 
+
+            intmain(intargc, char* argv[])
+            {
+
+                  shortsRtn;
+                  longmask;
+                  // X
+                  doubletime[5]={0, 500, 1000, 1500, 2000};
+                  doublepos[5];
+                  doublea[5], b[5], c[5];
+                  doubleprfVel, prfPos, t;
+                  shorttableId;
+                  doubleamplitude = 40000;
+                  shorttable = TABLE1;
+                  charkey;
+
+                  // 
+                  sRtn = GTN_Open ();
+                  commandhandler("GTN_Open ", sRtn);
+                  // 
+                  sRtn = GTN_Reset (1);
+                  commandhandler("GTN_Reset ", sRtn);
+                  // 
+                  // 
+                  sRtn = GTN_LoadConfig (1,"test.cfg");
+                  commandhandler("GTN_LoadConfig ", sRtn);
+                  // 
+                  sRtn =GTN_ClrSts(1,1, 8);
+                  commandhandler("GTN_ClrSts", sRtn);
+                  sRtn = GTN_AxisOn (1,AXIS);
+                  commandhandler("GTN_AxisOn", sRtn);
+                  // 
+                  Sleep(1000);
+                  // PVT
+                  sRtn = GTN_PrfPvt(1,AXIS);
+                  commandhandler("GTN_PrfPvt", sRtn);
+                  Calculate(amplitude, 5, &time[0], &pos[0]);
+                  // 
+                  sRtn = GTN_PvtTableComplete(1,table, 5, &time[0], &pos[0], &a[0], &b[0], &c[0], 0,
+      0);
+                  commandhandler("GTN_PvtTableComplete", sRtn);
+                  // 
+                  sRtn = GTN_PvtTableSelect(1,AXIS, table);
+                  commandhandler("GTN_PvtTableSelect", sRtn);
+                  // 
+                  sRtn = GTN_SetPvtLoop(1,AXIS, 0);
+                  commandhandler("GTN_SetPvtLoop", sRtn);
+
+                                                                                                                     46© 2019 
+ 4  PVT 
+
+                  mask = 1<<(AXIS-1);
+                  sRtn = GTN_PvtStart(1,mask);
+                  commandhandler("GTN_PvtStart", sRtn);
+
+while(1)
+{
+
+      // 
+      sRtn = GTN_PvtStatus(1,AXIS, &tableId, &t);
+      // 
+      sRtn = GTN_GetPrfVel (1,AXIS, &prfVel);
+      // 
+      sRtn = GTN_GetPrfPos(1,AXIS, &prfPos);
+      if( kbhit() )
+      {
+
+            key = getch();
+            if( 'A' == toupper(key) )
+            {
+
+                  amplitude *= 1.5;
+            }
+            if( 'B' == toupper(key) )
+            {
+
+                  amplitude *= 0.5;
+            }
+            if( ( 'A' == toupper(key) ) || ( 'B' == toupper(key) ) )
+            {
+
+                  Calculate(amplitude, 5, &time[0], &pos[0]);
+                  table = TABLE1 + TABLE2 - tableId;
+                  // 
+                  sRtn = GTN_PvtTableComplete(1,table, 5, &time[0], &pos[0], &a[0],
+
+                              &b[0], &c[0], 0, 0);
+                  if( 0 != sRtn )
+                  {
+
+                        commandhandler("GTN_PvtTableComplete", sRtn);
+                        exit(0);
+                  }
+                  // 
+                  sRtn = GTN_PvtTableSelect(1,AXIS, table);
+                  if( 0 != sRtn )
+                  {
+                        commandhandler("\nGTN_PvtTableSelect", sRtn);
+                        exit(0);
+                  }
+            }
+
+if( 'Q' == toupper(key) )
+{
+
+                                                         47© 2019 
+ 4  PVT 
+
+                                    mask = 1 << (AXIS-1);
+                              GT_Stop(1,mask, 0);
+
+                                    exit(0);
+                              }
+                        }
+                        printf("%2d %10.0lf %10.2lf %10.1lf\r", tableId, t, prfVel, prfPos);
+                  }
+                  // 
+                  sRtn = GTN_AxisOff(1,AXIS);
+                  printf("\nGTN_AxisOff ()=%d\n", sRtn);
+                  getch();
+                  return 0;
+            }
+
+3. Percent 
+
+      X Y X  Y X Y 
+X  Y  4-13 
+
+         X
+
+                                  
+      v
+
+                P2      P3
+
+      0     P1              P4                       P7
+                                                                              t
+
+       Y                            P5           P6
+      v
+                            
+
+                        P2          P3
+
+      0                 P1          P4          P5
+
+                                                                                              t
+
+                     4-13Percent  X  Y 
+
+X  7  4-10  4-11 
+
+                         4-10Percent  1
+
+                ms                  pulse                pulse/ms
+  P1                                                                0
+  P2                0                   0            60
+  P3                                                             
+  P4            1, 000                  5, 000       0           
+  P5                                                             
+  P6            2, 000                  15, 000      60          
+  P7                                                             
+                3, 000                  20, 000      60          
+
+                4, 000                  15, 000      0
+
+                5, 000                  5, 000       60
+
+                6, 000                  0            0
+
+ X 
+
+                                                         48© 2019 
+ 4  PVT 
+
+                   4-11Percent  2
+
+      ms          pulse             pulse/ms
+  P1         0
+  P2              0                     0
+  P3      1, 000
+  P4      2, 000  5, 000            2(5000-0)/(1000-0)-0=10
+  P5      3, 000
+  P6      4, 000  15, 000           2(15000-5000)/(2000-1000)-10=10
+  P7      5, 000
+          6, 000  20, 000           2(20000-15000)/(3000-2000)-10=0
+
+                  15, 000           2(15000-20000)/(4000-3000)-0=-10
+
+                  5, 000            2(5000-15000)/(5000-4000)-(-10)=-10
+
+                  0                 2(0-5000)/(6000-5000)-(-10)=0
+
+      Y  5 X  P3  Y  1
+ 2000  Y  P5  P1  4-12
+ 4-13 
+
+                   4-12Percent  3
+
+          ms                               pulse/ms
+  P1                                                  0
+  P2      2, 000           0        60
+  P3                                               
+  P4      2, 500           2, 500   0              
+  P5                                               
+          3, 500           12, 500  60             
+
+          4, 000           15, 000  0
+
+          5, 000           15, 000  0
+
+ Y 
+
+                   4-13Percent  4
+
+      ms          pulse             pulse/ms
+  P1      2, 000
+  P2      2, 500  0                     0
+  P3      3, 500
+  P4      4, 000  2, 500            2(2500-0)/(2500-2000)-0=10
+  P5      5, 000
+                  12, 500           2(12500-2500)/(3500-2500)-10=10
+
+                  15, 000           2(15000-12500)/(4000-3500)-10=0
+
+                  15, 000           2(15000-15000)/(5000-4000)-0=0
+
+      X  n Y  2n-1  X  2Y  3 
+XY  X  Y  4-14 
+
+                                           49© 2019 
+ 4  PVT 
+
+                                    4-14Percent  X-Y 
+
+ 4-3Percent 
+
+      #include "stdafx.h"
+      #include "conio.h"
+      #include "windows.h"
+      #include "gts.h"
+
+#define AXIS_X  1
+
+#define AXIS_Y  2
+
+#define TABLE_X 1
+
+#define TABLE_Y 2
+
+#define LOOP_COUNT 2
+
+intmain(intargc, char* argv[])
+{
+
+     shortsRtn;
+     longmask;
+     // X
+     doubletime_x[7] = {0, 1000, 2000, 3000, 4000, 5000, 6000};
+     doublepos_x[7] = {0, 5000, 15000, 20000, 15000, 5000, 0};
+     doublepercent_x[7] = {60, 0, 60, 60, 0, 60, 0};
+     // Y
+     doubletime_y[5] = {2000, 2500, 3500, 4000, 5000};
+     doublepos_y[5] = {0, 2500, 12500, 15000, 15000};
+     doublepercent_y[5] = {60, 0, 60, 0, 0};
+     doubleprfVel[2], prfPos[2], time[2];
+     shorttableId[2];
+
+// 
+sRtn = GTN_Open();
+commandhandler("GTN_Open", sRtn);
+
+                                                                 50© 2019 
+ 4  PVT 
+
+                  // 
+                  sRtn = GTN_Reset(1);
+                  commandhandler("GTN_Reset", sRtn);
+                  // 
+                  // 
+                  sRtn = GTN_LoadConfig(1,"test.cfg");
+                  commandhandler("GTN_LoadConfig", sRtn);
+                  // 
+                  sRtn =GTN_ClrSts (1,1, 8);
+                  commandhandler("GTN_ClrSts", sRtn);
+                  sRtn = GTN_AxisOn (1,AXIS_X);
+                  commandhandler("GTN_AxisOn", sRtn);
+                  sRtn = GTN_AxisOn (1,AXIS_Y);
+                  commandhandler("GTN_AxisOn", sRtn);
+                  // 
+                  Sleep(1000);
+                  // XPVT
+                  sRtn = GTN_PrfPvt(1,AXIS_X);
+                  commandhandler("GTN_PrfPvt", sRtn);
+                  // YPVT
+                  sRtn = GTN_PrfPvt(1,AXIS_Y);
+                  commandhandler("GTN_PrfPvt", sRtn);
+                  // X
+                  sRtn = GTN_PvtTablePercent(1,TABLE_X, 7, &time_x[0], &pos_x[0], &percent_x[0],
+      0);
+                  commandhandler("GTN_PvtTablePercent", sRtn);
+                  // Y
+                  sRtn = GTN_PvtTablePercent(1,TABLE_Y, 5, &time_y[0], &pos_y[0], &percent_y[0],
+      0);
+                  commandhandler("GTN_PvtTablePercent", sRtn);
+                  // XTABLE_X
+                  sRtn = GTN_PvtTableSelect(1,AXIS_X, TABLE_X);
+                  commandhandler("GTN_PvtTableSelect", sRtn);
+                  // YTABLE_Y
+                  sRtn = GTN_PvtTableSelect(1,AXIS_Y, TABLE_Y);
+                  commandhandler("GTN_PvtTableSelect", sRtn);
+                  // 
+                  sRtn = GTN_SetPvtLoop(1,AXIS_X, LOOP_COUNT);
+                  commandhandler("GTN_SetPvtLoop", sRtn);
+                  // 
+                  sRtn = GTN_SetPvtLoop(1,AXIS_Y, 2*LOOP_COUNT-1);
+                  commandhandler("GTN_SetPvtLoop", sRtn);
+                  // XY
+                  // Y12000ms
+                  // X2000msY
+                  mask = 1<<(AXIS_X-1);
+
+                                                                                                                     51© 2019 
+ 4  PVT 
+
+                  mask = 1<<(AXIS_Y-1);
+                  sRtn = GTN_PvtStart(1,mask);
+                  commandhandler("GTN_PvtStart", sRtn);
+
+                  while(!kbhit())
+                  {
+
+                        // 
+                        sRtn = GTN_PvtStatus(1,AXIS_X, &tableId[0], &time[0]);
+                        sRtn = GTN_PvtStatus(1,AXIS_Y, &tableId[1], &time[1]);
+                        // 
+                        sRtn = GTN_GetPrfVel (1,AXIS_X, &prfVel[0]);
+                        sRtn = GTN_GetPrfVel (1,AXIS_Y, &prfVel[1]);
+                        // 
+                        sRtn = GTN_GetPrfPos (1,AXIS_X, &prfPos[0]);
+                        sRtn = GTN_GetPrfPos (1,AXIS_Y, &prfPos[1]);
+                        printf("x:%2d %10.0lf %10.2lf %10.1lf y:%2d %10.0lf %10.2lf %10.1lf\r",
+                         tableId[0], time[0], prfVel[0], prfPos[0], tableId[1], time[1], prfVel[1], prfPos[1]);
+                  }
+                  // 
+                  sRtn = GTN_AxisOff (1,AXIS_X);
+                  printf("\nGTN_AxisOff()=%d, Axis:%d\n", sRtn, AXIS_X);
+                  sRtn = GTN_AxisOff (1,AXIS_Y);
+                  printf("\nGTN_AxisOff()=%d, Axis:%d\n", sRtn, AXIS_Y);
+                  getch();
+                  return 0;
+            }
+
+     4. Continuous 
+
+      X  A  B Y  C  D  X  B Y  D 
+       GTN_PvtContinuousCalculate  X  tx  Y  ty
+ tx>tyY  tx-ty  tx<tyX  ty-tx 
+X  Y  4-15 
+
+                                                                                                                     52© 2019 
+ 4  PVT 
+
+                           4-15Continuous  X  Y 
+
+ 4-4Continuous 
+
+      #include "stdafx.h"
+      #include "conio.h"
+      #include "windows.h"
+      #include "gts.h"
+
+#define AXIS_X  1
+
+#define AXIS_Y  2
+
+#define TABLE_X 1
+
+#define TABLE_Y 2
+
+intmain(intargc, char* argv[])
+{
+
+     shortsRtn;
+     longmask;
+     // X
+     doublepos_x[2] = {0, 30000};
+     doublevel_x[2] = {0, 0};
+     doublepercent_x[2] = {100, 100};
+     doublevelMax_x[2] = {10, 10};
+     doubleacc_x[2] = {0.01, 0.01};
+     doubledec_x[2] = {0.01, 0.01};
+     doubletime_x[2];
+     doubletimeBegin_x;
+
+                                                  53© 2019 
+ 4  PVT 
+
+                  // Y
+                  doublepos_y[2] = {0, 20000};
+                  doublevel_y[2] = {0, 0};
+                  doublepercent_y[2] = {100, 100};
+                  doublevelMax_y[2] = {10, 10};
+                  doubleacc_y[2] = {0.01, 0.01};
+                  doubledec_y[2] = {0.01, 0.01};
+                  doubletime_y[2];
+                  doubletimeBegin_y;
+                  doubleprfVel[2], prfPos[2], time[2];
+                  shorttableId[2];
+
+                  // 
+                  sRtn = GTN_Open();
+                  commandhandler("GTN_Open", sRtn);
+                  // 
+                  sRtn = GTN_Reset (1);
+                  commandhandler("GTN_Reset", sRtn);
+                  // 
+                  // 
+                  sRtn = GTN_LoadConfig(1,"test.cfg");
+                  commandhandler("GTN_LoadConfig", sRtn);
+                  // 
+                  sRtn =GTN_ClrSts (1,1, 8);
+                  commandhandler("GTN_ClrSts", sRtn);
+                  sRtn = GTN_AxisOn (1,AXIS_X);
+                  commandhandler("GTN_AxisOn", sRtn);
+                  sRtn = GTN_AxisOn (1,AXIS_Y);
+                  commandhandler("GTN_AxisOn", sRtn);
+                  // 
+                  Sleep(1000);
+                  // XPVT
+                  sRtn = GTN_PrfPvt(1,AXIS_X);
+                  commandhandler("GTN_PrfPvt", sRtn);
+                  // YPVT
+                  sRtn = GTN_PrfPvt(1,AXIS_Y);
+                  commandhandler("GTN_PrfPvt", sRtn);
+                  // X
+                  sRtn = GTN_PvtContinuousCalculate(1,2, &pos_x[0], &vel_x[0], &percent_x[0],
+
+                              &velMax_x[0], &acc_x[0], &dec_x[0], &time_x[0]);
+                  commandhandler("GTN_PvtContinuousCalculate", sRtn);
+                  // Y
+                  sRtn = GTN_PvtContinuousCalculate(1,2, &pos_y[0], &vel_y[0], &percent_y[0],
+
+                              &velMax_y[0], &acc_y[0], &dec_y[0], &time_y[0]);
+                  commandhandler("GTN_PvtContinuousCalculate", sRtn);
+
+                                                                                                                     54© 2019 
+ 4  PVT 
+
+                  // 
+                  if( time_x[1] <time_y[1] )
+                  {
+
+                        timeBegin_x = time_y[1] - time_x[1];
+                        timeBegin_y = 0;
+                  }
+                  else
+                  {
+                        timeBegin_x = 0;
+                        timeBegin_y = time_x[1] - time_y[1];
+                  }
+                  // X
+                  sRtn = GTN_PvtTableContinuous(1,TABLE_X, 2, &pos_x[0], &vel_x[0],
+      &percent_x[0],
+
+                              &velMax_x[0], &acc_x[0], &dec_x[0], timeBegin_x);
+                  commandhandler("GTN_PvtTableContinuous", sRtn);
+                  // Y
+                  sRtn = GTN_PvtTableContinuous(1,TABLE_Y, 2, &pos_y[0], &vel_y[0],
+      &percent_y[0],
+
+                              &velMax_y[0], &acc_y[0], &dec_y[0], timeBegin_y);
+                  commandhandler("GTN_PvtTableContinuous", sRtn);
+                  // XTABLE_X
+                  sRtn = GTN_PvtTableSelect(1,AXIS_X, TABLE_X);
+                  commandhandler("GTN_PvtTableSelect", sRtn);
+                  // YTABLE_Y
+                  sRtn = GTN_PvtTableSelect(1,AXIS_Y, TABLE_Y);
+                  commandhandler("GTN_PvtTableSelect", sRtn);
+                  // XY
+                  // Y12000ms
+                  // X2000msY
+                  mask = 1<<(AXIS_X-1);
+                  mask= 1<<(AXIS_Y-1);
+                  sRtn = GTN_PvtStart(mask);
+                  commandhandler("GTN_PvtStart", sRtn);
+                  while(!kbhit())
+                  {
+
+                        // 
+                        sRtn = GTN_PvtStatus(1,AXIS_X, &tableId[0], &time[0]);
+                        sRtn = GTN_PvtStatus(1,AXIS_Y, &tableId[1], &time[1]);
+                        // 
+                        sRtn = GTN_GetPrfVel (1,AXIS_X, &prfVel[0]);
+                        sRtn = GTN_GetPrfVel (1,AXIS_Y, &prfVel[1]);
+                        // 
+                        sRtn = GTN_GetPrfPos (1,AXIS_X, &prfPos[0]);
+                        sRtn = GTN_GetPrfPos (1,AXIS_Y, &prfPos[1]);
+                        printf("x:%2d %10.0lf %10.2lf %10.1lf y:%2d %10.0lf %10.2lf %10.1lf\r",
+
+                                                                                                                     55© 2019 
+ 4  PVT 
+                               tableId[0], time[0], prfVel[0], prfPos[0], tableId[1], time[1], prfVel[1], prfPos[1]);
+
+                  }
+                  // 
+                  sRtn = GTN_AxisOff (1,AXIS_X);
+                  printf("\nGTN_AxisOff()=%d, Axis:%d\n", sRtn, AXIS_X);
+                  sRtn = GTN_AxisOff (1,AXIS_Y);
+                  printf("\nGTN_AxisOff()=%d, Axis:%d\n", sRtn, AXIS_Y);
+                  getch();
+                  return 0;
+}
+
+                                                                                                                     56© 2019 
+ 5  Move 
+
+5 Move 
+
+""" 7  "
+""
+
+ GTN_FollowData
+GEN 
+
+
+5.1 
+
+                        5-1 Move 
+GTN_MoveAbsolute
+GTN_GetMoveAbsolute                                           
+GTN_MoveAbsoluteEx      MoveAbsolute 
+GTN_GetMoveAbsoluteEx   MoveAbsolute 
+GTN_MoveVelocity        MoveAbsoluteEx 
+GTN_GetMoveVelocity     MoveAbsoluteEx 
+                        MoveVelocity 
+                        MoveVelocity 
+
+5.2 
+
+     1. MoveAbsolute
+
+      MoveAbsolute 
+
+
+      
+       MoveAbsolute  20 GT_GetPrfMode 
+
+      GT_MoveAbsolute 
+       S 
+      S =2ta/(2ta+te)*100%
+       0 
+       100 te=0
+
+                                                                57© 2019 
+ 5  Move 
+
+                                          5-1Absolute  S 
+
+     2. MoveAbsoluteEx
+
+      MoveAbsoluteEx 
+
+
+      
+       MoveAbsoluteEx  20 GT_GetPrfMode 
+
+      GT_MoveAbsoluteEx 
+       S 
+      S =2ta/(2ta+te)*100%
+       0 
+       100 te=0
+       GT_MoveAbsolute  GT_MoveAbsoluteEx 
+ 5-2 
+
+                                                                                                                     58© 2019 
+ 5  Move 
+
+                  5-2 AbsoluteEx  S 
+
+velStart velEnd velStart  velEnd 
+
+ GT_MoveAbsoluteEx 
+
+accStartPercent "=accStartPercent×acc"
+
+decEndPercent "=decEndPercent×dec"
+
+3. MoveVelocity
+
+      MoveVelocity 
+
+
+
+
+       MoveVelocity  30 GT_GetPrfMode 
+
+
+      GT_MoveVelocity  acc
+ dec
+
+direction 
+
+MC_POSITIVE_DIRECTION  
+
+MC_NEGATIVE_DIRECTION  
+
+MC_CURRENT_DIRECTION   
+
+jerkBegin  0 
+
+jerkEnd  0 
+
+                                      59© 2019 
+ 5  Move 
+
+       jerkBegin  jerkEnd S 
+       jerkBegin  jerkEnd  5-3 
+
+                                                 5-3 Velocity 
+
+                                                                                                                     60© 2019 
+ 6  FollowEx 
+
+6 FollowEx 
+
+""" 7  
+""
+
+ GTN_FollowData
+GEN 
+
+
+6.1 
+
+                           6-1 FollowEx 
+
+                          
+
+GTN_PrfFollowEx            FollowEx 
+
+GTN_FollowDataPercentEx    FollowEx  FIFO  S 
+
+GTN_FollowDataPercent2Ex   FollowEx  FIFO  S 
+
+GTN_GetFollowDataPercent2Ex  S 
+
+GTN_FollowSwitchNowEx     FollowEx  FIFO
+
+GTN_FollowDoBitEx          FollowEx  FIFO  DO 
+
+GTN_FollowDelayEx          FollowEx  FIFO 
+
+GTN_FollowDiBitEx          FollowEx  FIFO  DI 
+
+6.2 
+
+     1. 
+
+      FollowEx 
+
+      1) GTN_FollowDoBitEx DO Follow 
+Follow        GTN_FollowData  GTN_FollowDataPercentEx 
+GTN_FollowDataPercent2Ex Follow  DO
+ Follow  DO 
+
+      2) GTN_FollowDelayEx Follow 
+ Follow 
+
+
+       Follow 
+       Follow  FIFO 
+
+       Follow  Follow  DO
+ DO
+      3) GTN_FollowDiBitEx DI  Follow 
+
+                                                                                                                     61© 2019 
+ 6  FollowEx 
+
+ DI  DI 
+ Follow 
+
+       Follow 
+
+     2. 
+
+      GTN_FollowSwitchNowEx Follow  Follow  FIFO
+      
+       2 
+       Follow  Follow  FIFO
+       Follow  Follow 
+      GT_FollowSwitchNowEx                      
+GTN_FollowSwitchNowEx   Follow  2    GTN_FollowSwitchNowEx   
+GTN_FollowDelayEx  GTN_FollowDiBitEx  Follow 
+3  GTN_FollowSwitchNowEx 
+
+
+                                                                                                                     62© 2019 
+ 7 
+
+7 
+
+ GTN_FollowData
+GEN 
+
+
+ core  profile 
+
+                                GEN 
+
+                core    008       016     032                                   064
+               profile
+                        1         1       1                                     [1,2]
+
+                        [1,8]     [1,16]  [1,32]                                [1,32]
+
+ 1 GTN_FollowClear
+
+               short GTN_FollowClear (short core, short profile, short fifo=0)
+ 
+                Follow  FIFO 
+               
+
+    core                                                                         18
+  profile
+                3 
+     fifo
+               
+
+               
+ 
+                FIFO01  0
+
+                1
+                  (1)  Follow  GTN_PrfFollow 
+                        Follow 
+                  (2)  FIFO 
+
+               GEN  3 
+               
+
+               
+
+                3-2Follow  FIFO 
+
+ 2 GTN_FollowData
+
+               short GTN_FollowData (short core, short profile, long masterSegment, double
+
+               slaveSegment, short type= FOLLOW_SEGMENT_NORMAL, short fifo=0)
+    
+                Follow  FIFO 
+
+      core                                                                       18
+     profile
+                6 
+masterSegment
+               
+slaveSegment
+       type    
+
+               pulse
+
+               pulse
+
+               
+
+                                                  63© 2019 
+ 7 
+
+     fifo      FOLLOW_SEGMENT_NORMAL 0
+               FOLLOW_SEGMENT_EVEN 1
+               FOLLOW_SEGMENT_STOP 2 0 
+               FOLLOW_SEGMENT_CONTINUE 3 FIFO 
+                FIFO01  0
+                1
+
+                  (1)  Follow  GTN_PrfFollow 
+                        Follow 
+
+                  (2) 
+               GEN  3 
+               
+
+               
+
+  3-2Follow  FIFO 
+
+ 3 GTN_FollowDataPercentEx
+
+               short GTN_FollowDataPercentEx(short core, short profile, double
+
+               masterSegment,  double  slaveSegment,                short  type=
+    
+               FOLLOW_SEGMENT_NORMAL, short percent, short fifo=0)
+    
+                FollowEx  FIFO  S 
+      core
+     profile                                                         61
+
+masterSegment   7 
+
+slaveSegment   
+
+       type    
+
+    percent    pulse
+       fifo
+               pulse
+  
+               
+    
+               FOLLOW_SEGMENT_NORMAL 0
+
+               FOLLOW_SEGMENT_EVEN 1
+
+               FOLLOW_SEGMENT_STOP 2 0 
+
+               FOLLOW_SEGMENT_CONTINUE 3 FIFO 
+
+               S 
+
+                FIFO01  0
+
+                1
+
+               (1)  FollowEx  GTN_PrfFollowEx
+
+                  FollowEx 
+
+               (2) 
+
+               GEN  3 
+
+               
+
+               
+
+               
+
+ 4 GTN_FollowDataPercent2Ex
+
+               short GTN_FollowDataPercent2Ex(short core, short profile, double
+               masterSegment, double slaveSegment, double velBeginRatio, double
+
+                                                      64© 2019 
+ 7 
+
+               velEndRatio, short percent=100, short *pPercent1=NULL, short fifo=0)
+
+                FollowEx  FIFO  S 
+    
+                                  61
+
+      core      9 
+     profile
+               
+masterSegment
+               
+slaveSegment
+velBeginRatio  pulse
+ velEndRatio
+               pulse
+    percent
+  pPercent1    
+
+       fifo    
+
+               S  S 
+
+                S 
+    
+                FIFO01  0
+
+                1
+
+               (1)  FollowEx  GTN_PrfFollowEx
+                     FollowEx 
+
+                  (2) 
+               GEN  3 
+
+               
+
+               
+
+               
+
+ 5 GTN_FollowDelayEx
+
+               short GTN_FollowDelayEx(short core, short profile, unsigned long delayTime,
+ 
+               short fifo=0)
+ 
+                FollowEx  FIFO 
+    core
+  profile                         61
+delayTime
+                4 
+     fifo
+               
+
+               
+ 
+               
+
+                FIFO01  0
+
+                1
+
+               (1)  FollowEx  GTN_PrfFollowEx
+                     FollowEx 
+
+               (2) 
+
+               GEN  3 
+
+               
+
+               
+
+               
+
+ 6 GTN_FollowDiBitEx
+
+               short GTN_FollowDiBitEx(short core, short profile, short diType, short index,
+               short value, unsigned long time, short fifo=0)
+
+                                                                                                        65© 2019 
+ 7 
+
+            FollowEx  FIFO  DI 
+ 
+                                        61
+
+    core    7 
+  profile
+           
+  diType
+           
+   index
+   value   IO
+    time
+     fifo  MC_LIMIT_POSITIVE(0)
+
+           MC_LIMIT_NEGATIVE(1)
+
+           MC_ALARM(2)
+ 
+           MC_HOME(3)
+
+           MC_GPI( 4)
+
+            IO 
+
+            IO 
+
+           1 0 
+
+            DI 0 
+
+            FIFO01  0
+
+            1
+
+           (1)  FollowEx  GTN_PrfFollowEx
+
+              FollowEx 
+
+           (2) 
+
+           GEN  3 
+
+           
+
+           
+
+           
+
+ 7 GTN_FollowDoBitEx
+
+           short GTN_FollowDoBitEx(short core, short profile, short doType, short index,
+ 
+           short value, short fifo=0)
+ 
+            FollowEx  FIFO  DO 
+    core
+  profile                               61
+
+  doType    6 
+
+   index   
+   value
+     fifo  
+
+           IO
+           MC_ENABLE(10)
+
+           MC_CLEAR(11)
+           MC_GPO( 12)
+
+            IO 
+
+            IO 
+
+           1 0 
+
+            FIFO01  0
+
+            1
+              (1)  FollowEx  GTN_PrfFollowEx
+
+              FollowEx 
+
+                                       66© 2019 
+ 7 
+
+              (2) 
+           GEN  3 
+           
+           
+           
+
+ 8 GTN_FollowSpace
+
+           short GTN_FollowSpace (short core, short profile, short *pSpace, short fifo=0)
+ 
+            Follow  FIFO 
+ 
+                                                                        18
+    core
+  profile   4 
+  pSpace
+           
+     fifo
+           
+
+            FIFO 
+ 
+            FIFO01  0
+
+                1           Follow           
+
+           GTN_PrfFollow  Follow 
+
+           GEN  3 
+
+           
+
+           
+
+            3-2Follow  FIFO 
+
+ 9 GTN_FollowStart
+
+           short GTN_FollowStart (short core, long mask, long option)
+ 
+            Follow 
+ 
+                                                                        18
+    core
+   mask     3 
+
+  option   
+
+            Follow  bit  1 
+
+           Bit 5 4 3 2 1 0
+
+            6  5  4  3  2  1 
+
+           Bit 11 10 9 8 7 6
+
+            12  11  10  9  8  7 
+
+            FIFO 0 bit  0  FIFO1
+            bit  1  FIFO2
+
+           Bit 5 4 3 2 1 0
+
+            6  5  4  3  2  1 
+
+           Bit 11 10 9 8 7 6
+
+            12  11  10  9  8  7 
+
+            1
+              (1)  Follow  GTN_PrfFollow 
+                    Follow 
+              (2) 
+              (3) 
+
+                                   67© 2019 
+ 7 
+
+             (4)  FIFO 
+             (5)  mask 
+          GEN  3 
+          
+          
+           3-2Follow  FIFO 
+
+ 10 GTN_FollowSwitch
+
+          short GTN_FollowSwitch(short core, long mask)
+ 
+           Follow  FIFO
+ 
+                                                          18
+    core
+           2 
+   mask
+          
+
+           Follow  FIFO  bit  1 
+           FIFO
+ 
+          Bit 5 4 3 2 1 0
+
+           6  5  4  3  2  1 
+
+          Bit 11 10 9 8 7 6
+
+           12  11  10  9  8  7 
+
+           1
+             (1)  Follow  GTN_PrfFollow 
+                   Follow 
+
+          (2) 
+          (3)  FIFO 
+          (4)  mask 
+
+          GEN  3 
+          
+
+          
+
+           3-3Follow  FIFO 
+
+ 11 GTN_FollowSwitchNowEx
+
+          short GTN_FollowSwitchNowEx(short core, short profile, short method, short
+
+          buffer, short fifo)
+
+          FollowEx  FIFO
+  core
+ profile                                                  61
+
+method     5 
+
+ buffer   
+
+          
+
+          
+
+          FOLLOW_SWITCH_SEGMENT( 1)
+
+          FOLLOW_SWITCH_TABLE( 2) FIFO
+
+          
+
+          0
+
+          1 Follow 
+
+                                                         68© 2019 
+ 7 
+
+     fifo       FIFO01  0
+                1
+
+                  (1)  FollowEx  GTN_PrfFollowEx
+                        FollowEx 
+ 
+                  (2) 
+                  (3)  FIFO 
+                  (4)  mask 
+               GEN  3 
+               
+               
+               
+
+ 12 GTN_GetFollowDataPercent2Ex
+
+               short GTN_GetFollowDataPercent2Ex(short core, double masterSegment,
+
+               double velBeginRatio, double velEndRatio, short percent, short percent1,
+
+               double *pSlavePos)
+   
+                S 
+
+      core                                61
+
+masterSegment   9 
+
+velBeginRatio  
+ velEndRatio
+               pulse
+    percent
+   percent1    
+  pSlavePos
+               
+  
+               S  S 
+   
+                S 
+
+               pulse
+
+                1
+
+               (1)  FollowEx  GTN_PrfFollowEx
+                     FollowEx 
+
+                  (2) 
+               GEN  3 
+
+               
+
+               
+
+               
+
+ 13 GTN_GetFollowEvent
+
+               short GTN_GetFollowEvent (short core, short profile, short *pEvent, short
+
+               *pMasterDir, long *pPos)
+
+                Follow 
+
+  core                                    18
+ profile
+pEvent          5 
+
+               
+
+               
+
+               
+
+                                         69© 2019 
+ 7 
+
+pMasterDir    FOLLOW_EVENT_START 1 GTN_FollowStart 
+    pPos      
+              FOLLOW_EVENT_PASS 2
+              
+              1 -1 
+              pulse
+               event  FOLLOW_EVENT_PASS 
+                   1           Follow           
+              GTN_PrfFollow  Follow 
+              GEN  3 
+              
+
+              GTN_SetFollowEvent
+              
+
+ 14 GTN_GetFollowLoop
+
+              short GTN_GetFollowLoop(short core, short profile, long *pLoop)
+ 
+               Follow 
+ 
+                                                        18
+    core
+  profile      3 
+  pLoop
+              
+
+              
+ 
+               Follow 
+                   1           Follow           
+              GTN_PrfFollow  Follow 
+              GEN  3 
+              
+
+              GTN_SetFollowLoop
+
+               3-2Follow  FIFO 
+
+ 15 GTN_GetFollowMaster
+
+              short GTN_GetFollowMaster (short core, short profile, short *pMasterIndex,
+   
+              short *pMasterType, short *pMasterItem)
+   
+               Follow 
+      core
+     profile                                            18
+
+pMasterIndex   5 
+
+pMasterType   
+
+              
+
+              
+
+               1
+               2 
+
+              
+
+              FOLLOW_MASTER_PROFILE 2(profile)
+              
+
+              FOLLOW_MASTER_ENCODER 1(encoder)
+
+                                                       70© 2019 
+ 7 
+
+pMasterItem  
+             FOLLOW_MASTER_AXIS 3(axis)
+              masterType= FOLLOW_MASTER_AXIS 
+             0  axis 
+             1  axis 
+                  1           Follow           
+             GTN_PrfFollow  Follow 
+             GEN  3 
+             
+
+             GTN_SetFollowMaster
+             
+
+ 16 GTN_GetFollowMemory
+
+             short GTN_GetFollowMemory (short core, short profile, short *pMemory)
+ 
+              Follow 
+ 
+                                            18
+    core
+  profile     3 
+
+pMemory      
+
+             
+
+              Follow 
+             0 Follow  16 
+             1 Follow  512 
+                  1           Follow           
+             GTN_PrfFollow  Follow 
+             GEN  3 
+             
+
+             GTN_SetFollowMemory
+             
+
+ 17 GTN_GetMoveAbsolute
+
+             short GTN_GetMoveAbsolute(short core, short profile, TMoveAbsolutePrm
+
+             *pPrm)
+
+              MoveAbsolute 
+  core
+ profile                                    57
+
+  pPrm        3 
+
+             
+
+             
+
+             
+
+             typedef struct
+
+             {
+
+                long pos;    //
+                double vel;  //
+                double acc;  // pulse/ms2
+                double dec;  // pulse/ms2
+
+                                           71© 2019 
+ 7 
+
+               short percent; // S 
+           } TMoveAbsolutePrm
+           GEN  3 
+           
+
+           GTN_MoveAbsolute
+           
+
+ 18 GTN_GetMoveAbsoluteEx
+
+           short GTN_GetMoveAbsoluteEx(short core, short profile, TMoveAbsolutePrmEx
+ 
+           *pPrm)                               57
+            MoveAbsoluteEx 
+           
+    core
+  profile   3 
+           
+   pPrm
+           
+
+           
+ 
+           typedef struct
+
+           {
+
+              long pos;          //
+
+              double vel;        //
+
+              double acc;        // pulse/ms2
+
+              double dec;        // pulse/ms2
+
+              short percent;     // S 
+
+              double velStart;   // pulse/ms
+
+              double velEnd;     // pulse/ms
+
+              double accStartPercent; //
+
+              double decEndPercent; //
+
+           } TMoveAbsolutePrmEx
+
+           GEN  3 
+           
+
+           GTN_MoveAbsoluteEx
+
+           
+
+ 19 GTN_GetMoveVelocity
+
+           short GTN_GetMoveVelocity(short core, short profile, TMoveVelocityPrm
+
+           *pPrm)
+
+            MoveVelocity 
+
+  core                                          57
+ profile
+            3 
+  pPrm
+           
+
+           
+
+           
+
+           typedef struct
+
+           {
+
+                                               72© 2019 
+ 7 
+
+                double vel;        //
+                double acc;        // pulse/ms2
+                double dec;        // pulse/ms2
+                double jerkBegin;  // jerk pulse/ms3
+                double jerkEnd;    // jerk pulse/ms3
+                short direction;   //
+
+           } TMoveVelocityPrm
+
+           GEN  3 
+           
+ 
+           GTN_MoveVelocity
+
+           
+
+ 20 GTN_GetPtLoop
+
+           short GTN_GetPtLoop(short core, short profile, long *pLoop)
+ 
+            PT 
+ 
+                                                                             9
+    core
+  profile   3 
+  pLloop
+           
+
+           
+ 
+            PT 
+            1 PT  GTN_PrfPt 
+            PT 
+           GEN  3 
+           
+
+           GTN_SetPtLoop
+
+           
+
+ 21 GTN_GetPtInfo
+
+           short GTN_GetPtInfo(short core, short profile, TPtInfo *pPtInfo)
+
+            PT  PT  1
+
+                                                                             9
+  core
+ profile    3 
+
+pPtInfo    
+
+           
+
+            PT TPtInfo 
+
+           typedef struct
+
+           {
+
+                double prfPos;     //PT
+
+                long loop;         //
+
+                short mode;        //PTFIFO PT_MODE_STATIC              (0)
+
+                                   PT_MODE_DYNAMIC (1)
+
+                short fifoUse;     //FIFO0-1
+                short fifoPlace;   //FIFO
+
+           0-1
+
+                                                            73© 2019 
+ 7 
+
+               short segmentNumber;  //
+
+               unsigned long segmentReceive[2]; //[0][1]
+
+               unsigned long segmentExecute[2]; //[0][1]
+
+               unsigned long bufferReceive[2]; //[0]PT buffer[1]
+
+             
+
+               unsigned long bufferExecute[2]; //[0]PTbuffer[1]
+
+             } TPtInfo;
+
+              1 PT  GTN_PrfPt 
+
+              PT 
+
+             GEN  3 
+ 
+             
+
+             
+
+             
+
+ 22 GTN_GetPtMemory
+
+             short GTN_GetPtMemory(short core, short profile, short *pMemory)
+ 
+              PT 
+ 
+                                                                               9
+    core
+  profile     3 
+pMemory
+             
+
+             
+ 
+              PT 
+              1 PT  GTN_PrfPt 
+              PT 
+             GEN  3 
+             
+
+             GTN_SetPtMemory
+             
+
+ 23 GTN_GetPvtLoop
+
+             short GTN_GetPvtLoop(short core, short profile, long *pLoopCount, long
+  
+             *pLoop)
+  
+              PVT 
+     core
+    profile                               34
+pLoopCount
+    pLoop     4 
+
+             
+
+             
+             
+
+             
+
+              1 PVT  GTN_PrfPvt
+              PVT 
+             GEN  3 
+             
+
+             GTN_SetPvtLoop
+
+                                         74© 2019 
+ 7 
+
+     
+
+ 24 GTN_MoveAbsolute
+
+           short GTN_MoveAbsolute(short core, short profile, TMoveAbsolutePrm *pPrm)
+ 
+            MoveAbsolute 
+ 
+                                                57
+    core
+  profile   3 
+
+   pPrm    
+
+           
+ 
+           
+
+           typedef struct
+
+           {
+
+              long pos;         //
+
+              double vel;       //
+
+              double acc; // pulse/ms2
+
+              double dec; // pulse/ms2
+
+              short percent; // S 
+
+           } TMoveAbsolutePrm
+
+           GEN  3 
+           
+
+           GTN_GetMoveAbsolute
+
+           
+
+ 25 GTN_MoveAbsoluteEx
+
+           short GTN_MoveAbsoluteEx(short core, short profile, TMoveAbsolutePrmEx
+
+           *pPrm)
+
+            MoveAbsoluteEx 
+  core
+ profile                                        57
+
+  pPrm      3 
+
+           
+
+           
+
+           
+
+           typedef struct
+
+           {
+
+              long pos;          //
+
+              double vel;        //
+
+              double acc;        // pulse/ms2
+              double dec;        // pulse/ms2
+              short percent;     // S 
+              double velStart;   // pulse/ms
+              double velEnd;     // pulse/ms
+
+              double accStartPercent; //
+
+              double decEndPercent; //
+
+           } TMoveAbsolutePrmEx
+
+                                               75© 2019 
+ 7 
+
+           GEN  3 
+           
+ 
+           GTN_GetMoveAbsoluteEx
+           
+
+ 26 GTN_MoveVelocity
+
+           short GTN_MoveVelocity(short core, short profile, TMoveVelocityPrm *pPrm)
+ 
+            MoveVelocity 
+ 
+                                                                        57
+    core
+  profile   3 
+
+   pPrm    
+
+           
+ 
+           
+
+           typedef struct
+
+           {                      //
+               double vel;        // pulse/ms2
+               double acc;        // pulse/ms2
+               double dec;        // jerk pulse/ms3
+               double jerkBegin;  // jerk pulse/ms3
+               double jerkEnd;    //
+               short direction;
+
+           } TMoveVelocityPrm
+
+           GEN  3 
+           
+
+           GTN_GetMoveVelocity
+
+           
+
+ 27 GTN_PrfFollow
+
+           short GTN_PrfFollow (short core, short profile, short dir)
+ 
+            Follow 
+ 
+                                                                        18
+    core
+  profile   3 
+
+     dir   
+
+           
+
+           
+ 
+           0 1 -1 
+
+            1
+              (1)  GT_Stop 
+
+           (2)  Follow  dir  dir 
+
+           GEN  3 
+
+           
+
+           
+
+            3-2Follow  FIFO 
+
+                                                                       76© 2019 
+ 7 
+
+ 28 GTN_PrfFollowEx
+
+           short GTN_PrfFollowEx(short core, short profile, short dir)
+ 
+            FollowEx 
+ 
+                                                                         61
+    core
+  profile   3 
+
+     dir   
+
+           
+
+           
+ 
+           0 1 -1 
+
+            1
+              (1)  GT_Stop 
+
+           (2)  FollowEx  dir  dir 
+
+           GEN  3 
+
+           
+
+           
+
+           
+
+ 29 GTN_PrfPt
+
+           short GTN_PrfPt(short core, short profile, short mode=PT_MODE_STATIC)
+ 
+            PT 
+ 
+                                                                                  9
+    core
+  profile   3 
+
+   mode    
+
+           
+
+            FIFO 
+ 
+           PT_MODE_STATIC 0
+
+           PT_MODE_DYNAMIC 1
+
+            1 GT_Stop 
+
+           GEN  3 
+
+           
+
+           
+
+            2-1PT  FIFO
+
+ 30 GTN_PrfPvt
+
+           short GTN_PrfPvt(short core, short profile)
+ 
+            PVT 
+ 
+                                                                         34
+    core
+  profile   2 
+
+           
+
+           
+
+            1 GT_Stop 
+
+           GEN  3 
+           
+
+                                                        77© 2019 
+ 7 
+
+           
+           
+
+ 31 GTN_PtClear
+
+           short GTN_PtClear(short core, short profile, short fifo)
+ 
+            PT  FIFO 
+           
+
+    core   
+  profile
+                                                                       9
+     fifo
+            3 
+
+           
+ 
+           
+
+            FIFO01  0
+           
+
+            1
+              (1)  FIFO 
+              (2)  FIFO
+              (3)  PT  GTN_PrfPt 
+                    PT 
+
+           GEN  3 
+           
+
+           
+
+            2-1PT  FIFO
+
+ 32 GTN_PtData
+
+           short GTN_PtData(short core, short profile, double pos, long time, short type,
+ 
+           short fifo=0)
+ 
+            PT  FIFO 
+    core
+  profile                                                              9
+
+    pos     6 
+    time
+           
+    type
+           
+     fifo
+           pulse
+
+           ms
+
+           
+
+           PT_SEGMENT_NORMAL 0
+
+           PT_SEGMENT_EVEN 1
+           PT_SEGMENT_STOP 2 0 
+
+            FIFO01  0
+
+           
+
+            1
+
+           (1)  Space  0 Space  0
+
+           (2)  PT  GTN_PrfPt 
+
+              PT 
+
+                                                                     78© 2019 
+ 7 
+
+           GEN  3 
+           
+           
+            2-1PT  FIFO
+
+ 33 GTN_PtSpace
+
+           short GTN_PtSpace(short core, short profile, short *pSpace, short fifo=0)
+ 
+            PT  FIFO 
+ 
+                                                                                      9
+    core
+  profile   4 
+  pSpace
+           
+     fifo
+           
+
+            PT  FIFO 
+ 
+            FIFO01  0
+           
+
+            1 PT  GTN_PrfPt 
+            PT 
+           GEN  3 
+           
+
+           
+
+            2-1PT  FIFO
+
+ 34 GTN_PtStart
+
+           short GTN_PtStart(short core, long mask, long option)
+ 
+            PT 
+ 
+                                                                                      9
+    core
+   mask     3 
+
+  option   
+
+            PT  bit  1 
+
+           Bit 5 4 3 2 1 0
+
+            6  5  4  3  2  1 
+
+           Bit 11 10 9 8 7 6
+
+            12  11  10  9  8  7 
+
+            FIFO 0
+
+           Bit 5 4 3 2 1 0
+
+            6  5  4  3  2  1 
+
+           Bit 11 10 9 8 7 6
+
+            12  11  10  9  8  7 
+
+            bit  0  FIFO1 fifo=0
+            bit  1  FIFO2 fifo=1
+           
+
+            1 FIFO 
+           GEN  3 
+           
+
+                                                                  79© 2019 
+ 7 
+
+           
+            2-1PT  FIFO
+
+ 35 GTN_PvtContinuousCalculate
+
+           short GTN_PvtContinuousCalculate(short core, long count, double *pPos,
+
+           double *pVel, double *pPercent, double *pVelMax, double *pAcc, double *pDec,
+
+           double *pTime)
+ 
+            PVT  Continuous 
+
+    core                                                             34
+   count
+   pPos     9 
+    pVel
+           
+ pPercent
+           
+ pVelMax
+   pAcc    pulse count
+   pDec
+   pTime   pulse/ms count
+
+            count
+ 
+           [0, 100]
+
+           pulse/ms count
+
+           "pulse/ms2" count
+
+           "pulse/ms2" count
+
+           ms
+
+           GEN  3 
+
+           
+
+            4-4Continuous 
+
+ 36 GTN_PvtPercentCalculate
+
+           short GTN_PvtPercentCalculate (short core, long count, double *pTime, double
+ 
+           *pPos, double *pPercent, double velBegin, double *pVel)
+ 
+            PVT  Percent 
+    core
+   count                                                             34
+   pTime
+   pPos     7 
+
+ pPercent  
+
+ velBegin  
+    pVel
+           ms count
+
+           pulse count
+
+            count
+
+           [0, 100]
+
+           pulse/ms
+
+           pulse/ms
+
+            1
+
+           (1)  PVT  GTN_PrfPvt 
+
+              PVT 
+
+           (2)  GT_Stop 
+
+           (3)  1024 
+
+                                                                    80© 2019 
+ 7 
+
+           GEN  3 
+           
+           
+            4-3Percent 
+
+ 37 GTN_PvtStart
+
+           short GTN_PvtStart(short core, long mask)
+ 
+            PVT 
+ 
+                                                       34
+    core
+            2 
+   mask
+           
+
+            bit  1 
+ 
+           Bit 5 4 3 2 1 0
+
+            6  5  4  3  2  1 
+
+           Bit 11 10 9 8 7 6
+
+            12  11  10  9  8  7 
+
+            GTN_PvtTableSelect 
+
+            1
+
+            1
+
+           (1) 
+           (2)  PVT  GTN_PrfPvt 
+
+                 PVT 
+
+           GEN  3 
+           
+
+           
+
+            4-1PVT 
+
+ 38 GTN_PvtStatus
+
+           short GTN_PvtStatus(short core, short profile, short *pTableId, double *pTime,
+ 
+           short count)
+ 
+            PVT 
+    core
+  profile                                              34
+ pTableId
+   pTime    5 
+   count
+           
+
+           
+ 
+            ID
+
+           ms
+
+           
+
+            1 PVT  GTN_PrfPvt
+
+            PVT 
+
+           GEN  3 
+
+           
+
+           
+
+            4-1PVT 
+
+                                                      81© 2019 
+ 7 
+
+ 39 GTN_PvtTable
+
+             short GTN_PvtTable (short core, short tableId, long count, double *pTime,
+ 
+             double *pPos, double *pVel)
+ 
+              PVT  PVT 
+    core
+  tableId                                  34
+   count
+   pTime      6 
+   pPos
+             
+    pVel
+             [1, 32]
+
+              1024 
+ 
+              1 
+
+             ms count
+
+             pulse count
+
+             pulse/ms count
+
+              1
+
+             (1)  PVT  GTN_PrfPvt 
+
+                PVT 
+
+             (2)  GT_Stop 
+
+             (3)  1024 
+
+             GEN  3 
+
+             
+
+             
+
+              4-1PVT 
+
+ 40 GTN_PvtTableComplete
+
+             short GTN_PvtTableComplete (short core, short tableId, long count, double
+
+             *pTime, double *pPos, double *pA, double *pB, double *pC, double velBegin,
+
+             double velEnd)
+   
+              PVT  Complete 
+
+     core                                  34
+    tableId
+              10 
+    count
+             
+    pTime
+     pPos    [1, 32]
+pApBpC
+              1024 
+  velBegin
+    velEnd    1 
+
+             ms count
+
+             pulse count
+
+              count
+
+             
+
+             pulse/ms
+
+             pulse/ms
+
+              1
+
+             (1)  PVT  GTN_PrfPvt 
+
+                PVT 
+
+                                          82© 2019 
+ 7 
+
+              (2)  GT_Stop 
+              (3)  1024 
+           GEN  3 
+           
+           
+           
+
+ 41 GTN_PvtTableContinuous
+
+           short GTN_PvtTableContinuous (short core, short tableId, long count, double
+
+           *pPos, double *pVel, double *pPercent, double *pVelMax, double *pAcc, double
+
+           *pDec, double timeBegin)
+ 
+            PVT  Continuous 
+
+    core                                                              34
+  tableId
+   count    10 
+   pPos
+           
+    pVel
+ pPercent  [1, 32]
+ pVelMax
+            1024 
+   pAcc
+   pDec     1~8 
+timeBegin
+           pulse count
+
+           pulse/ms count
+ 
+            count
+
+           [0, 100]
+
+           pulse/ms count
+
+           "pulse/ms2" count
+
+           "pulse/ms2" count
+
+           ms
+
+            1
+
+           (1)  PVT  GTN_PrfPvt 
+
+              PVT 
+
+           (2)  GT_Stop 
+
+           (3)  1024 
+
+           GEN  3 
+
+           
+
+           
+
+            4-4Continuous 
+
+ 42 GTN_PvtTablePercent
+
+           short GTN_PvtTablePercent (short core, short tableId, long count, double
+
+           *pTime, double *pPos, double *pPercent, double velBegin)
+
+            PVT  Percent 
+
+  core                                                                34
+ tableId
+            7 
+
+           
+
+           [1, 32]
+
+                                     83© 2019 
+ 7 
+
+   count    1024 
+   pTime    1~3 
+   pPos    ms count
+ pPercent  pulse count
+ velBegin   count
+           [0, 100]
+           pulse/ms
+            1
+ 
+              (1)  PVT  GTN_PrfPvt 
+                    PVT 
+
+              (2)  GT_Stop 
+              (3)  1024 
+           GEN  3 
+           
+           
+            4-3Percent 
+
+ 43 GTN_PvtTableSelect
+
+           short GTN_PvtTableSelect(short core, short profile, short tableId)
+ 
+            PVT 
+ 
+                                  34
+    core
+  profile   3 
+
+  tableId  
+
+           
+
+           
+ 
+           PVT  32 [1, 32]
+
+            1
+
+           GEN  3 
+           
+
+           
+
+            4-1PVT 
+
+ 44 GTN_SetFollowEvent
+
+           short GTN_SetFollowEvent(short core, short profile, short event, short
+
+           masterDir, long pos)
+
+            Follow 
+  core
+ profile                          18
+
+  event     5 
+
+           
+
+           
+
+           
+
+           FOLLOW_EVENT_START 1 GTN_FollowStart 
+
+           
+
+           FOLLOW_EVENT_PASS 2
+
+                                 84© 2019 
+ 7 
+
+masterDir    
+    pos      1 -1 
+             pulse
+              event  FOLLOW_EVENT_PASS 
+                  1           Follow           
+             GTN_PrfFollow  Follow 
+             GEN  3 
+             
+
+             GTN_GetFollowEvent
+              3-2Follow  FIFO 
+
+ 45 GTN_SetFollowLoop
+
+             short GTN_SetFollowLoop(short core, short profile, short loop)
+ 
+              Follow 
+ 
+                                  18
+    core
+  profile     3 
+    loop
+             
+
+             
+ 
+              Follow 
+             [-32768, 32767]loop  1 
+                  1           Follow           
+             GTN_PrfFollow  Follow 
+             GEN  3 
+             
+
+             GTN_GetFollowEvent
+              3-2Follow  FIFO 
+
+ 46 GTN_SetFollowMaster
+
+             short GTN_SetFollowMaster (short core, short profile, short masterIndex, short
+  
+             masterType = FOLLOW_MASTER_PROFILE, short masterItem)
+  
+              Follow 
+     core
+    profile                       18
+
+masterIndex   5 
+
+masterType   
+
+             
+
+              profile
+              1
+
+              2 
+
+             
+
+             FOLLOW_MASTER_PROFILE 2(profile)
+
+             
+
+             FOLLOW_MASTER_ENCODER 1(encoder)
+
+             
+
+             FOLLOW_MASTER_AXIS 3(axis)
+
+                                 85© 2019 
+ 7 
+
+masterItem  FOLLOW_MASTER_AXIS_OTHER( 103)  core2  core1
+             (axis)
+            FOLLOW_MASTER_ENCODER_OTHER( 101)  core2 
+            core1 (encoder)
+             masterType= FOLLOW_MASTER_AXIS 
+            0  axis 
+            1  axis 
+             1
+
+               (1)  GT_Stop 
+               (2)  Follow  GTN_PrfFollow 
+
+                     Follow 
+            GEN  3 
+            
+
+            GTN_GetFollowMaster
+             3-2Follow  FIFO 
+
+ 47 GTN_SetFollowMemory
+
+            short GTN_SetFollowMemory (short core, short profile, short memory)
+ 
+             Follow 
+ 
+                                                             18
+    core
+  profile    3 
+ memory
+            
+
+            
+ 
+            Follow 
+            0 Follow  16 
+            1 Follow  512 
+             1
+
+               (1)  GT_Stop 
+               (2)  Follow  GTN_PrfFollow 
+
+                     Follow 
+            GEN  3 
+            
+
+            GTN_GetFollowMemory
+            
+
+ 48 GTN_SetPtLoop
+
+ short GTN_SetPtLoop(short core, short profile, long loop)
+
+  PT 
+
+                                                                                 9
+
+  3 
+
+core        
+
+profile     
+
+loop         PT 
+             0
+
+                                                            86© 2019 
+ 7 
+
+           
+            1 PT  GTN_PrfPt 
+            PT 
+           GEN  3 
+           
+
+           GTN_GetPtLoop
+           
+
+ 49 GTN_SetPtMemory
+
+           short GTN_SetPtMemory(short core, short profile, short memory)
+ 
+            PT (FIFO)
+ 
+                                                                           9
+    core
+  profile   3 
+ memory
+           
+
+           
+ 
+           PT 
+           0 PT  32 
+           1 PT  1024 
+            1
+
+              (1)  GT_Stop 
+              (2)  PT  GTN_PrfPt 
+
+                    PT 
+           GEN  3 
+           
+
+           GTN_GetPtMemory
+
+           
+
+ 50 GTN_SetPvtLoop
+
+           short GTN_SetPvtLoop(short core, short profile, long loop)
+ 
+            PVT 
+ 
+                                                                        34
+    core
+  profile   3 
+    loop
+           
+
+           
+ 
+           
+           0 
+            1 GT_PvtTable  PVT 
+           GTN_PrfPvt  PVT 
+           GEN  3 
+           
+
+           GTN_GetPvtLoop
+           
+
+                            87© 2019 
+ 8 
+
+8 
+
+8.1 
+
+       1 GTN_FollowClear............................................................................................................... 63
+       2 GTN_FollowData................................................................................................................ 63
+       3 GTN_FollowDataPercentEx.............................................................................................. 64
+       4 GTN_FollowDataPercent2Ex ........................................................................................... 64
+       5 GTN_FollowDelayEx.......................................................................................................... 65
+       6 GTN_FollowDiBitEx ........................................................................................................... 65
+       7 GTN_FollowDoBitEx .......................................................................................................... 66
+       8 GTN_FollowSpace ............................................................................................................. 67
+       9 GTN_FollowStart................................................................................................................ 67
+       10 GTN_FollowSwitch......................................................................................................... 68
+       11 GTN_FollowSwitchNowEx ............................................................................................ 68
+       12 GTN_GetFollowDataPercent2Ex ................................................................................. 69
+       13 GTN_GetFollowEvent.................................................................................................... 69
+       14 GTN_GetFollowLoop ..................................................................................................... 70
+       15 GTN_GetFollowMaster.................................................................................................. 70
+       16 GTN_GetFollowMemory................................................................................................ 71
+       17 GTN_GetMoveAbsolute ................................................................................................ 71
+       18 GTN_GetMoveAbsoluteEx............................................................................................ 72
+       19 GTN_GetMoveVelocity .................................................................................................. 72
+       20 GTN_GetPtLoop............................................................................................................. 73
+       21 GTN_GetPtInfo ............................................................................................................... 73
+       22 GTN_GetPtMemory ....................................................................................................... 74
+       23 GTN_GetPvtLoop........................................................................................................... 74
+       24 GTN_MoveAbsolute....................................................................................................... 75
+       25 GTN_MoveAbsoluteEx .................................................................................................. 75
+       26 GTN_MoveVelocity ........................................................................................................ 76
+       27 GTN_PrfFollow ............................................................................................................... 76
+       28 GTN_PrfFollowEx........................................................................................................... 77
+       29 GTN_PrfPt ....................................................................................................................... 77
+       30 GTN_PrfPvt ..................................................................................................................... 77
+       31 GTN_PtClear................................................................................................................... 78
+       32 GTN_PtData.................................................................................................................... 78
+       33 GTN_PtSpace................................................................................................................. 79
+       34 GTN_PtStart.................................................................................................................... 79
+       35 GTN_PvtContinuousCalculate ..................................................................................... 80
+       36 GTN_PvtPercentCalculate............................................................................................ 80
+       37 GTN_PvtStart.................................................................................................................. 81
+       38 GTN_PvtStatus............................................................................................................... 81
+
+                                                                                                                     88© 2019 
+ 8         GTN_PvtTable................................................................................................................. 82
+           GTN_PvtTableComplete................................................................................................ 82
+       39  GTN_PvtTableContinuous ............................................................................................ 83
+       40  GTN_PvtTablePercent ................................................................................................... 83
+       41  GTN_PvtTableSelect...................................................................................................... 84
+       42  GTN_SetFollowEvent .................................................................................................... 84
+       43  GTN_SetFollowLoop...................................................................................................... 85
+       44  GTN_SetFollowMaster .................................................................................................. 85
+       45  GTN_SetFollowMemory ................................................................................................ 86
+       46  GTN_SetPtLoop ............................................................................................................. 86
+       47  GTN_SetPtMemory........................................................................................................ 87
+       48  GTN_SetPvtLoop ........................................................................................................... 87
+       49
+       50
+
+8.2 
+
+       1-1 ..................................................................................................................................... 7
+       2-1PT ................................................................................................................ 9
+       2-2PT  FIFO ....................................................................................................... 12
+       3-1Follow  ....................................................................................................... 18
+       3-2  1 ....................................................................................................... 23
+       3-3  2 ....................................................................................................... 23
+       3-4Follow  FIFO  ............................................................................................................ 24
+       3-5Follow  FIFO  ................................................................................ 28
+       3-6Follow  FIFO  ................................................................ 28
+       3-7Follow  FIFO  ............................................................................ 28
+       4-1PVT  ........................................................................................................... 34
+       4-2  PVT  ..................................................................................................... 35
+       4-3PVT  ............................................................................................... 36
+       4-4  PVT  ............................................................................. 37
+       4-5Complete .......................................................................................... 38
+       4-6Complete .................................................................................. 39
+       4-7 Percent  ................................................................................................ 40
+       4-8 Continuous .......................................................................................... 42
+       4-9PVT  ............................................................................................... 43
+       4-10Percent  1............................................................................................ 48
+       4-11Percent  2 ............................................................................................ 49
+       4-12Percent  3............................................................................................ 49
+       4-13Percent  4............................................................................................ 49
+       5-1 Move  ..................................................................................................... 57
+       6-1 FollowEx ............................................................................................... 61
+
+           89© 2019 
+ 8 
+
+8.3 
+
+       2-1PT ...................................................................................................................... 10
+       2-2PT .................................................................................................................. 10
+       2-3PT ...................................................................................................................11
+       2-4PT ...................................................................................................... 12
+       2-5PT ...................................................................................................... 14
+       3-1Follow  ........................................................................................................... 19
+       3-2Follow  FIFO ............................................................................................................. 21
+       3-3 ................................................................................................................................... 22
+       3-4  Follow  ......................................................................................... 23
+       3-5Follow  FIFO  ........................................................................................ 24
+       3-6Follow  FIFO  ........................................................................................ 25
+       3-7Follow  FIFO  ........................................................................................ 28
+       3-8Follow  FIFO  ........................................................................................ 29
+       4-1 ....................................................................................................................... 35
+       4-2  PVT  ............................................................................................. 37
+       4-3  PV ............................................................................................ 38
+       4-4Complete .................................................................................................. 38
+       4-5Complete .................................................................................. 39
+       4-6Complete  51050  ............................................. 39
+       4-7Percent  ......................................................................................... 40
+       4-8 Percent  ............................................................................................ 41
+       4-9Continuous ............................................................................................................... 41
+       4-10Continuous  .................................................................................... 42
+       4-11PVT  ......................................................................................... 43
+       4-12 Complete  ...................................................................................... 45
+       4-13Percent  X  Y ...................................................................... 48
+       4-14Percent  X-Y  ...................................................................................... 50
+       4-15Continuous  X  Y  ............................................................... 53
+       5-1Absolute  S ....................................................................................... 58
+       5-2 AbsoluteEx  S  .............................................................................. 59
+       5-3 Velocity  ......................................................................................................... 60
+
+8.4 
+
+       2-1PT  FIFO ........................................................................................................................11
+       2-2PT  FIFO ....................................................................................................................... 14
+       3-1  follow  ................................................................................................. 22
+       3-2Follow  FIFO  ........................................................................................................... 24
+       3-3Follow  FIFO  ........................................................................................................... 27
+       4-1PVT ....................................................................................................................... 43
+       4-2Complete ............................................................................................................. 45
+
+                                                                                                                     90© 2019 
+ 8 
+
+       4-3Percent  ................................................................................................................ 50
+       4-4Continuous ......................................................................................................... 53
+
+                                                                                                                     91© 2019 
+
