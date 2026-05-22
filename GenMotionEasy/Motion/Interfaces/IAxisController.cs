@@ -18,6 +18,8 @@ namespace GenMotionEasy.Motion.Control
         IFollowExMotion FollowEx { get; }
         IGearMotion Gear { get; }
         IInterpMotion Interp { get; }
+        IPointMotion Point { get; }
+        IJogMotion Jog { get; }
 
         // ---- 基础操作 ----
         short Restart();
@@ -36,9 +38,8 @@ namespace GenMotionEasy.Motion.Control
 
         // ---- 状态查询 ----
         StatusInfo? GetEcatStatus();
-
-        // ---- 点位运动（Trap 模式） ----
-        void PointMove(int pos, double vel, double acc, double dec);
-        void PointAbsMove(int pos, double vel, double acc, double dec);
+        int GetRemainingDistance(int targetPos);
+        Task<bool> WaitAxisStop(int targetPos, double vel, double acc, double dec,
+            double tolerance = 10, int extraSeconds = 5);
     }
 }

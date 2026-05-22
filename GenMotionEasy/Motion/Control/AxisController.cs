@@ -2,6 +2,7 @@
 using GenMotionEasy.Motion.Control.Details;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,10 +17,6 @@ namespace GenMotionEasy.Motion.Control
         private readonly short _axis;
         private readonly object _lock = new object();
         private bool _homingTag = false;
-        private int _pos;
-        private double _vel;
-        private double _acc;
-        private double _dec;
 
         public IAxisHome AxisHome { get; }
         public IPTMotion PT { get; }
@@ -29,6 +26,8 @@ namespace GenMotionEasy.Motion.Control
         public IFollowExMotion FollowEx { get; }
         public IGearMotion Gear { get; }
         public IInterpMotion Interp { get; }
+        public IPointMotion Point { get; }
+        public IJogMotion Jog { get; }
 
 
         public AxisController(short core, short axis, short crd = 1)
@@ -43,6 +42,8 @@ namespace GenMotionEasy.Motion.Control
             FollowEx = new AxisMotionFollowEx(_core, axis, _lock);
             Gear = new AxisMotionGear(_core, axis, _lock);
             Interp = new AxisMotionInterp(_core, crd, _lock);
+            Point = new AxisMotionPoint(_core, axis, _lock, () => ClearAlarm(), () => GetEcatStatus(), () => EnableAxis());
+            Jog = new AxisMotionJog(_core, axis, _lock);
         }
 
 
@@ -277,56 +278,6 @@ namespace GenMotionEasy.Motion.Control
 
 
 
-        //点位运动
-        public void PointMove(int pos, double vel, double acc, double dec)
-        {
-            this._acc = acc;
-            this._vel = vel;
-            this._pos = pos;
-            this._dec = dec;
-            lock (_lock)
-            {
-                ClearAlarm();
-                //查询是否使能
-                StatusInfo status = GetEcatStatus();
-                if (status.EnableAxis == false)
-                {
-                    EnableAxis();
-                    Thread.Sleep(100);
-                }
-                TTrapPrm trap;
-                short rtn = GTN_PrfTrap(_core, _axis);
-                rtn = GTN_GetTrapPrm(_core, _axis, out trap);
-                trap.acc = acc;
-                trap.dec = dec;
-                trap.smoothTime = 50;
-                rtn = GTN_SetTrapPrm(_core, _axis, ref trap);
-                double prfValue;
-                int encValue;
-                uint encClock, prfClock;
-                GTN_GetEcatEncPos(1, _axis, out encValue);//编码器位置
-                GTN_GetPrfPos(1, _axis, out prfValue, 1, out prfClock);//规划位置
-                rtn = GTN_SetVel(_core, _axis, vel);
-                Console.WriteLine("axis:" + _axis + ",pos:" + pos + ",acc:" + acc + ",dec:" + dec + ",vel:" + vel);
-                rtn = GTN_SetPos(_core, _axis, pos);
-                rtn = GTN_Update(_core, 1 << (_axis - 1));
-            }
-        }
-
-
-        public void PointAbsMove(int pos, double vel, double acc, double dec)
-        {
-            lock (_lock)
-            {
-                TMoveAbsolutePrmEx move = new TMoveAbsolutePrmEx();
-                move.acc = acc;
-                move.dec = dec;
-                move.pos = pos;
-                move.vel = vel;
-                GTN_MoveAbsoluteEx(_core, _axis, ref move);
-            }
-        }
-
         public void StopAxis()
         {
             lock (_lock)
@@ -335,7 +286,60 @@ namespace GenMotionEasy.Motion.Control
             }
         }
 
+        /// <summary>
+        /// 查询剩余距离：目标位置 - 编码器位置
+        /// </summary>
+        public int GetRemainingDistance(int targetPos)
+        {
+            int encPos;
+            GTN_GetEcatEncPos(1, _axis, out encPos);
+            return targetPos - encPos;
+        }
 
+        /// <summary>
+        /// 等待轴到达目标位置并停止运动。
+        /// 根据速度与距离估算运动时间，再加上 extraSeconds 秒的缓冲。
+        /// </summary>
+        /// <param name="targetPos">目标位置</param>
+        /// <param name="vel">运动速度</param>
+        /// <param name="acc">加速度</param>
+        /// <param name="dec">减速度</param>
+        /// <param name="tolerance">规划位置与编码器位置允许的偏差</param>
+        /// <param name="extraSeconds">额外等待秒数（在估算时间上增加）</param>
+        /// <returns>是否在超时前到达</returns>
+        public async Task<bool> WaitAxisStop(int targetPos, double vel, double acc, double dec,
+            double tolerance = 10, int extraSeconds = 5)
+        {
+            int encPos;
+            GTN_GetEcatEncPos(1, _axis, out encPos);
+            double distance = Math.Abs(targetPos - encPos);
+
+            double safeVel = Math.Max(vel, 1);
+            double safeAcc = Math.Max(acc, 1);
+            double safeDec = Math.Max(dec, 1);
+            double estimatedTime = distance / safeVel + safeVel / safeAcc + safeVel / safeDec;
+            int waitMs = (int)(estimatedTime * 1000) + extraSeconds * 1000;
+
+            var sw = Stopwatch.StartNew();
+            while (sw.ElapsedMilliseconds < waitMs)
+            {
+                double prfPos;
+                uint prfClock;
+                GTN_GetPrfPos(1, _axis, out prfPos, 1, out prfClock);
+
+                int encPosNow;
+                GTN_GetEcatEncPos(1, _axis, out encPosNow);
+
+                if (Math.Abs(prfPos - encPosNow) <= tolerance && Math.Abs(prfPos - targetPos) <= tolerance)
+                {
+                    return true;
+                }
+
+                await Task.Delay(50);
+            }
+
+            return false;
+        }
 
     }
 }

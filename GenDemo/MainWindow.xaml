@@ -1,12 +1,614 @@
 ﻿<Window x:Class="GenDemo.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GenDemo"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="GenDemo - 运动控制演示程序" Height="750" Width="1100"
+        WindowStartupLocation="CenterScreen">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
+        <ToolBar Grid.Row="0" Background="#2D2D30" Height="40">
+            <Button x:Name="BtnOpen" Content="打开控制器" Click="BtnOpen_Click" Width="90" Margin="5,0"/>
+            <Button x:Name="BtnClose" Content="关闭控制器" Click="BtnClose_Click" Width="90" Margin="5,0" IsEnabled="False"/>
+            <Separator/>
+            <Label Content="轴数:" FontWeight="Bold" Foreground="White"/>
+            <ComboBox x:Name="CboAxisCount" SelectedIndex="3" Width="50" IsEnabled="False">
+                <ComboBoxItem>1</ComboBoxItem>
+                <ComboBoxItem>2</ComboBoxItem>
+                <ComboBoxItem>3</ComboBoxItem>
+                <ComboBoxItem>4</ComboBoxItem>
+                <ComboBoxItem>5</ComboBoxItem>
+                <ComboBoxItem>6</ComboBoxItem>
+                <ComboBoxItem>7</ComboBoxItem>
+                <ComboBoxItem>8</ComboBoxItem>
+            </ComboBox>
+            <Button x:Name="BtnInitAxes" Content="初始化轴" Click="BtnInitAxes_Click" Width="80" Margin="5,0" IsEnabled="False"/>
+            <Separator/>
+            <Label x:Name="LblCardStatus" Content="未连接" Foreground="#FF5555" FontWeight="Bold" Margin="10,0"/>
+        </ToolBar>
+
+        <TabControl Grid.Row="1" Margin="5">
+            <!-- Tab 1: 轴控制 -->
+            <TabItem Header="轴控制">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Width="280" Margin="0,0,10,0">
+                        <GroupBox Header="轴选择" Margin="0,0,0,10">
+                            <StackPanel>
+                                <ComboBox x:Name="CboAxisCtrl" SelectedIndex="0" Margin="5"/>
+                                <WrapPanel Margin="5">
+                                    <Button x:Name="BtnEnable" Content="使能" Click="BtnEnable_Click" Width="75" Margin="2"/>
+                                    <Button x:Name="BtnDisable" Content="关闭使能" Click="BtnDisable_Click" Width="75" Margin="2"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <Button x:Name="BtnReset" Content="复位" Click="BtnReset_Click" Width="75" Margin="2"/>
+                                    <Button x:Name="BtnClearAlarm" Content="清除报警" Click="BtnClearAlarm_Click" Width="75" Margin="2"/>
+                                </WrapPanel>
+                                <Button x:Name="BtnStop" Content="紧急停止" Click="BtnStop_Click" Width="160" Margin="5" Background="#FF4444" Foreground="White"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="EtherCAT 总线">
+                            <StackPanel>
+                                <WrapPanel Margin="5">
+                                    <Button Content="加载总线" Click="BtnEcatLoad_Click" Width="75" Margin="2"/>
+                                    <Button Content="启动总线" Click="BtnEcatStart_Click" Width="75" Margin="2"/>
+                                </WrapPanel>
+                                <Button Content="查询总线状态" Click="BtnEcatState_Click" Width="160" Margin="5"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="配置">
+                            <StackPanel>
+                                <Button Content="加载配置文件" Click="BtnLoadConfig_Click" Width="160" Margin="5"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                    <GroupBox Grid.Column="1" Header="轴状态" Height="200">
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock><Run Text="运动模式:"/> <Run x:Name="TxtMotionType" Text="-"/></TextBlock>
+                                <TextBlock><Run Text="轴使能:"/> <Run x:Name="TxtEnableState" Text="-"/></TextBlock>
+                                <TextBlock><Run Text="规划器状态:"/> <Run x:Name="TxtPlanning" Text="-"/></TextBlock>
+                                <TextBlock><Run Text="正限位:"/> <Run x:Name="TxtPlusLimit" Text="-"/></TextBlock>
+                                <TextBlock><Run Text="负限位:"/> <Run x:Name="TxtMinusLimit" Text="-"/></TextBlock>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock><Run Text="轴报警:"/> <Run x:Name="TxtAxisAlarm" Text="-"/></TextBlock>
+                                <TextBlock><Run Text="跟随误差报警:"/> <Run x:Name="TxtFollowAlarm" Text="-"/></TextBlock>
+                                <TextBlock><Run Text="平滑停止:"/> <Run x:Name="TxtSmoothStop" Text="-"/></TextBlock>
+                                <TextBlock><Run Text="急停:"/> <Run x:Name="TxtScram" Text="-"/></TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- Tab 2: 回零 -->
+            <TabItem Header="回零">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Width="300" Margin="0,0,10,0">
+                        <GroupBox Header="回零参数">
+                            <StackPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="轴:" VerticalAlignment="Center" Width="30"/>
+                                    <ComboBox x:Name="CboHomeAxis" SelectedIndex="0" Width="80"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="方法:" VerticalAlignment="Center" Width="60"/>
+                                    <ComboBox x:Name="CboHomeMethod" SelectedIndex="0" Width="180">
+                                        <ComboBoxItem Content="0 - 当前位置回零" Tag="0"/>
+                                        <ComboBoxItem Content="1 - 负向限位回零" Tag="1"/>
+                                        <ComboBoxItem Content="2 - 正向限位回零" Tag="2"/>
+                                        <ComboBoxItem Content="6 - IEC 标准回零" Tag="6"/>
+                                        <ComboBoxItem Content="7 - 限位+Z脉冲" Tag="7"/>
+                                    </ComboBox>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="切换速度:" VerticalAlignment="Center" Width="80"/>
+                                    <TextBox x:Name="TxtHomeSwitchSpeed" Text="50000" Width="100"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="爬行速度:" VerticalAlignment="Center" Width="80"/>
+                                    <TextBox x:Name="TxtHomeIndexSpeed" Text="10000" Width="100"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="加速度:" VerticalAlignment="Center" Width="80"/>
+                                    <TextBox x:Name="TxtHomeAcc" Text="1000000" Width="100"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="偏移量:" VerticalAlignment="Center" Width="80"/>
+                                    <TextBox x:Name="TxtHomeOffset" Text="0" Width="100"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <Button x:Name="BtnStartHome" Content="开始回零" Click="BtnStartHome_Click" Height="35" Margin="5" Background="#4488FF" Foreground="White"/>
+                        <Button Content="重置回零状态" Click="BtnResetHomeStatus_Click" Height="30" Margin="5"/>
+                    </StackPanel>
+                    <GroupBox Grid.Column="1" Header="回零状态" Height="150">
+                        <StackPanel>
+                            <TextBlock x:Name="TxtHomeStatus" Text="等待操作..." FontSize="14" Margin="10"/>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- Tab 3: 点位运动 -->
+            <TabItem Header="点位运动">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Width="320" Margin="0,0,10,0">
+                        <GroupBox Header="运动参数">
+                            <StackPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="轴:" VerticalAlignment="Center" Width="30"/>
+                                    <ComboBox x:Name="CboMoveAxis" SelectedIndex="0" Width="80"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="目标位置:" VerticalAlignment="Center" Width="80"/>
+                                    <TextBox x:Name="TxtMovePos" Text="100000" Width="120"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="速度:" VerticalAlignment="Center" Width="80"/>
+                                    <TextBox x:Name="TxtMoveVel" Text="50000" Width="120"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="加速度:" VerticalAlignment="Center" Width="80"/>
+                                    <TextBox x:Name="TxtMoveAcc" Text="1000000" Width="120"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="减速度:" VerticalAlignment="Center" Width="80"/>
+                                    <TextBox x:Name="TxtMoveDec" Text="1000000" Width="120"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="S曲线(%):" VerticalAlignment="Center" Width="80"/>
+                                    <TextBox x:Name="TxtMovePercent" Text="0" Width="120"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <WrapPanel Margin="5">
+                            <Button x:Name="BtnPointMove" Content="Trap点位运动" Click="BtnPointMove_Click" Width="120" Margin="2" Background="#4488FF" Foreground="White"/>
+                            <Button x:Name="BtnAbsMove" Content="绝对定位(MoveAbs)" Click="BtnAbsMove_Click" Width="130" Margin="2"/>
+                        </WrapPanel>
+                        <Button x:Name="BtnMoveStop" Content="停止" Click="BtnMoveStop_Click" Width="260" Height="30" Margin="5" Background="#FF4444" Foreground="White"/>
+                    </StackPanel>
+                    <GroupBox Grid.Column="1" Header="当前位置">
+                        <StackPanel Margin="10">
+                            <TextBlock x:Name="TxtMoveCurrentPos" Text="规划位置: -" FontSize="14"/>
+                            <TextBlock x:Name="TxtMoveCurrentEnc" Text="编码器位置: -" FontSize="14"/>
+                            <TextBlock x:Name="TxtMoveCurrentVel" Text="速度: -" FontSize="14"/>
+                            <TextBlock x:Name="TxtMoveFollowErr" Text="跟随误差: -" FontSize="14"/>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- Tab 4: PT运动 -->
+            <TabItem Header="PT">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Width="320" Margin="0,0,10,0">
+                        <GroupBox Header="PT模式">
+                            <StackPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="轴:" VerticalAlignment="Center" Width="30"/>
+                                    <ComboBox x:Name="CboPtAxis" SelectedIndex="0" Width="80"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="模式:" VerticalAlignment="Center" Width="60"/>
+                                    <RadioButton x:Name="RdoPtStatic" Content="静态" IsChecked="True" Margin="5,0" Checked="RdoPtMode_Checked"/>
+                                    <RadioButton x:Name="RdoPtDynamic" Content="动态" Checked="RdoPtMode_Checked"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="内存:" VerticalAlignment="Center" Width="60"/>
+                                    <RadioButton x:Name="RdoPtMemSmall" Content="小(32段)" Margin="5,0"/>
+                                    <RadioButton x:Name="RdoPtMemLarge" Content="大(1024段)" IsChecked="True"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="循环次数:" VerticalAlignment="Center" Width="80"/>
+                                    <TextBox x:Name="TxtPtLoop" Text="0" Width="100"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="数据推送">
+                            <StackPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="位置:" VerticalAlignment="Center" Width="50"/>
+                                    <TextBox x:Name="TxtPtPos" Text="50000" Width="80"/>
+                                    <TextBlock Text="时间(ms):" VerticalAlignment="Center" Width="70" Margin="5,0,0,0"/>
+                                    <TextBox x:Name="TxtPtTime" Text="500" Width="60"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="段类型:" VerticalAlignment="Center" Width="60"/>
+                                    <ComboBox x:Name="CboPtSegType" SelectedIndex="0" Width="100">
+                                        <ComboBoxItem Content="NORMAL"/>
+                                        <ComboBoxItem Content="EVEN"/>
+                                        <ComboBoxItem Content="STOP"/>
+                                    </ComboBox>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <Button x:Name="BtnPtPush" Content="推送数据" Click="BtnPtPush_Click" Width="90" Margin="2"/>
+                                    <Button x:Name="BtnPtClear" Content="清除" Click="BtnPtClear_Click" Width="60" Margin="2"/>
+                                    <Button Content="查看空间" Click="BtnPtSpace_Click" Width="80" Margin="2"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <WrapPanel Margin="5">
+                            <Button x:Name="BtnPtStart" Content="启动" Click="BtnPtStart_Click" Width="100" Background="#4488FF" Foreground="White"/>
+                            <Button x:Name="BtnPtStop" Content="停止" Click="BtnPtStop_Click" Width="100" Margin="5,0" Background="#FF4444" Foreground="White"/>
+                        </WrapPanel>
+                        <TextBlock x:Name="TxtPtStatus" Text="就绪" Margin="5" Foreground="Gray"/>
+                    </StackPanel>
+                    <GroupBox Grid.Column="1" Header="PT数据队列">
+                        <StackPanel Margin="10">
+                            <TextBlock x:Name="TxtPtSpace" Text="剩余空间: -" FontSize="13"/>
+                            <TextBlock x:Name="TxtPtInfo" Text="运行信息: -" FontSize="13"/>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- Tab 5: PVT运动 -->
+            <TabItem Header="PVT">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Width="320" Margin="0,0,10,0">
+                        <GroupBox Header="PVT参数">
+                            <StackPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="轴:" VerticalAlignment="Center" Width="30"/>
+                                    <ComboBox x:Name="CboPvtAxis" SelectedIndex="0" Width="80"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="模式:" VerticalAlignment="Center" Width="60"/>
+                                    <ComboBox x:Name="CboPvtMode" SelectedIndex="0" Width="150">
+                                        <ComboBoxItem Content="PVT (位置/速度/时间)"/>
+                                        <ComboBoxItem Content="Complete (位置/时间)"/>
+                                        <ComboBoxItem Content="Percent (位置/时间/百分比)"/>
+                                        <ComboBoxItem Content="Continuous (连续)"/>
+                                    </ComboBox>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="数据表:" VerticalAlignment="Center" Width="60"/>
+                                    <ComboBox x:Name="CboPvtTable" SelectedIndex="0" Width="80">
+                                        <ComboBoxItem>0</ComboBoxItem>
+                                        <ComboBoxItem>1</ComboBoxItem>
+                                        <ComboBoxItem>2</ComboBoxItem>
+                                        <ComboBoxItem>3</ComboBoxItem>
+                                    </ComboBox>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="循环:" VerticalAlignment="Center" Width="60"/>
+                                    <TextBox x:Name="TxtPvtLoop" Text="0" Width="80"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="PVT数据点">
+                            <StackPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="位置:" VerticalAlignment="Center" Width="50"/>
+                                    <TextBox x:Name="TxtPvtPos1" Text="50000" Width="80"/>
+                                    <TextBlock Text="速度:" VerticalAlignment="Center" Width="40" Margin="5,0,0,0"/>
+                                    <TextBox x:Name="TxtPvtVel1" Text="10000" Width="60"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="位置:" VerticalAlignment="Center" Width="50"/>
+                                    <TextBox x:Name="TxtPvtPos2" Text="100000" Width="80"/>
+                                    <TextBlock Text="速度:" VerticalAlignment="Center" Width="40" Margin="5,0,0,0"/>
+                                    <TextBox x:Name="TxtPvtVel2" Text="20000" Width="60"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="位置:" VerticalAlignment="Center" Width="50"/>
+                                    <TextBox x:Name="TxtPvtPos3" Text="50000" Width="80"/>
+                                    <TextBlock Text="速度:" VerticalAlignment="Center" Width="40" Margin="5,0,0,0"/>
+                                    <TextBox x:Name="TxtPvtVel3" Text="10000" Width="60"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="时间(ms):" VerticalAlignment="Center" Width="70"/>
+                                    <TextBox x:Name="TxtPvtTime" Text="1000" Width="80"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <WrapPanel Margin="5">
+                            <Button x:Name="BtnPvtStart" Content="发送并启动" Click="BtnPvtStart_Click" Width="120" Background="#4488FF" Foreground="White"/>
+                            <Button x:Name="BtnPvtStop" Content="停止" Click="BtnPvtStop_Click" Width="80" Margin="5,0" Background="#FF4444" Foreground="White"/>
+                        </WrapPanel>
+                    </StackPanel>
+                    <GroupBox Grid.Column="1" Header="PVT运行状态">
+                        <StackPanel Margin="10">
+                            <TextBlock x:Name="TxtPvtStatus" Text="就绪" FontSize="13"/>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- Tab 6: 电子齿轮 -->
+            <TabItem Header="电子齿轮">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Width="320" Margin="0,0,10,0">
+                        <GroupBox Header="齿轮参数">
+                            <StackPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="从轴:" VerticalAlignment="Center" Width="50"/>
+                                    <ComboBox x:Name="CboGearSlave" SelectedIndex="0" Width="80"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="主轴类型:" VerticalAlignment="Center" Width="80"/>
+                                    <ComboBox x:Name="CboGearMasterType" SelectedIndex="0" Width="150">
+                                        <ComboBoxItem Content="编码器(ENCODER)"/>
+                                        <ComboBoxItem Content="规划器(PROFILE)"/>
+                                        <ComboBoxItem Content="轴(AXIS)"/>
+                                    </ComboBox>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="主轴索引:" VerticalAlignment="Center" Width="80"/>
+                                    <TextBox x:Name="TxtGearMasterIdx" Text="0" Width="100"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="主:从比例:" VerticalAlignment="Center" Width="80"/>
+                                    <TextBox x:Name="TxtGearMasterEven" Text="1" Width="50"/>
+                                    <TextBlock Text=":" VerticalAlignment="Center" Margin="2"/>
+                                    <TextBox x:Name="TxtGearSlaveEven" Text="1" Width="50"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="离合区域:" VerticalAlignment="Center" Width="80"/>
+                                    <TextBox x:Name="TxtGearSlope" Text="0" Width="100"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <WrapPanel Margin="5">
+                            <Button x:Name="BtnGearStart" Content="启动齿轮" Click="BtnGearStart_Click" Width="120" Background="#4488FF" Foreground="White"/>
+                            <Button x:Name="BtnGearStop" Content="停止齿轮" Click="BtnGearStop_Click" Width="100" Margin="5,0" Background="#FF4444" Foreground="White"/>
+                        </WrapPanel>
+                        <WrapPanel Margin="5">
+                            <Button x:Name="BtnGearOneToOne" Content="1:1快速启动" Click="BtnGearOneToOne_Click" Width="150" Margin="2"/>
+                            <Button Content="减速比(2:1)" Click="BtnGearReduction_Click" Width="100" Margin="2"/>
+                        </WrapPanel>
+                    </StackPanel>
+                    <GroupBox Grid.Column="1" Header="齿轮状态">
+                        <StackPanel Margin="10">
+                            <TextBlock x:Name="TxtGearStatus" Text="就绪" FontSize="13"/>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- Tab 7: 跟随 -->
+            <TabItem Header="跟随">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Width="350" Margin="0,0,10,0">
+                        <GroupBox Header="跟随(Follow)参数">
+                            <StackPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="从轴:" VerticalAlignment="Center" Width="50"/>
+                                    <ComboBox x:Name="CboFollowAxis" SelectedIndex="0" Width="80"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="主轴:" VerticalAlignment="Center" Width="80"/>
+                                    <TextBox x:Name="TxtFollowMaster" Text="0" Width="100"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="内存:" VerticalAlignment="Center" Width="60"/>
+                                    <RadioButton x:Name="RdoFollowMemSmall" Content="小(16段)" Margin="5,0"/>
+                                    <RadioButton x:Name="RdoFollowMemLarge" Content="大(512段)" IsChecked="True"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="循环次数:" VerticalAlignment="Center" Width="80"/>
+                                    <TextBox x:Name="TxtFollowLoop" Text="0" Width="100"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="梯形曲线(快速启动)">
+                            <StackPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="加速段(主):" VerticalAlignment="Center" Width="90"/>
+                                    <TextBox x:Name="TxtFollowAccelM" Text="50000" Width="80"/>
+                                    <TextBlock Text="从:" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                    <TextBox x:Name="TxtFollowAccelS" Text="50000" Width="80"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="匀速段(主):" VerticalAlignment="Center" Width="90"/>
+                                    <TextBox x:Name="TxtFollowEvenM" Text="100000" Width="80"/>
+                                    <TextBlock Text="从:" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                    <TextBox x:Name="TxtFollowEvenS" Text="100000" Width="80"/>
+                                </WrapPanel>
+                                <WrapPanel Margin="5">
+                                    <TextBlock Text="减速段(主):" VerticalAlignment="Center" Width="90"/>
+                                    <TextBox x:Name="TxtFollowDecelM" Text="50000" Width="80"/>
+                                    <TextBlock Text="从:" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                    <TextBox x:Name="TxtFollowDecelS" Text="50000" Width="80"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <WrapPanel Margin="5">
+                            <Button x:Name="BtnFollowStart" Content="启动跟随" Click="BtnFollowStart_Click" Width="120" Background="#4488FF" Foreground="White"/>
+                            <Button x:Name="BtnFollowStop" Content="停止" Click="BtnFollowStop_Click" Width="80" Margin="5,0" Background="#FF4444" Foreground="White"/>
+                        </WrapPanel>
+                    </StackPanel>
+                    <GroupBox Grid.Column="1" Header="跟随状态">
+                        <StackPanel Margin="10">
+                            <TextBlock x:Name="TxtFollowStatus" Text="就绪" FontSize="13"/>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- Tab 8: 插补 -->
+            <TabItem Header="插补">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Width="350" Margin="0,0,10,0">
+                            <GroupBox Header="坐标系设置">
+                                <StackPanel>
+                                    <WrapPanel Margin="5">
+                                        <TextBlock Text="维数:" VerticalAlignment="Center" Width="50"/>
+                                        <ComboBox x:Name="CboInterpDim" SelectedIndex="1" Width="100">
+                                            <ComboBoxItem Content="2D (XY)"/>
+                                            <ComboBoxItem Content="3D (XYZ)"/>
+                                            <ComboBoxItem Content="4D (XYZA)"/>
+                                        </ComboBox>
+                                    </WrapPanel>
+                                    <WrapPanel Margin="5">
+                                        <TextBlock Text="轴1:" VerticalAlignment="Center" Width="40"/>
+                                        <ComboBox x:Name="CboInterpAxis1" SelectedIndex="0" Width="60"/>
+                                        <TextBlock Text="轴2:" VerticalAlignment="Center" Width="40" Margin="5,0"/>
+                                        <ComboBox x:Name="CboInterpAxis2" SelectedIndex="1" Width="60"/>
+                                    </WrapPanel>
+                                    <WrapPanel Margin="5">
+                                        <TextBlock Text="轴3:" VerticalAlignment="Center" Width="40"/>
+                                        <ComboBox x:Name="CboInterpAxis3" SelectedIndex="2" Width="60"/>
+                                        <TextBlock Text="轴4:" VerticalAlignment="Center" Width="40" Margin="5,0"/>
+                                        <ComboBox x:Name="CboInterpAxis4" SelectedIndex="3" Width="60"/>
+                                    </WrapPanel>
+                                    <WrapPanel Margin="5">
+                                        <TextBlock Text="合成最大速度:" VerticalAlignment="Center" Width="100"/>
+                                        <TextBox x:Name="TxtInterpSynVel" Text="100000" Width="80"/>
+                                    </WrapPanel>
+                                    <WrapPanel Margin="5">
+                                        <TextBlock Text="合成最大加速度:" VerticalAlignment="Center" Width="100"/>
+                                        <TextBox x:Name="TxtInterpSynAcc" Text="1000000" Width="80"/>
+                                    </WrapPanel>
+                                    <WrapPanel Margin="5">
+                                        <TextBlock Text="终点速度:" VerticalAlignment="Center" Width="100"/>
+                                        <TextBox x:Name="TxtInterpVelEnd" Text="0" Width="80"/>
+                                    </WrapPanel>
+                                    <Button x:Name="BtnInterpSetup" Content="建立坐标系" Click="BtnInterpSetup_Click" Width="150" Margin="5"/>
+                                    <Button x:Name="BtnInterpClear" Content="清除轨迹" Click="BtnInterpClear_Click" Width="150" Margin="5"/>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Header="轨迹生成">
+                                <StackPanel>
+                                    <RadioButton x:Name="RdoInterpLine" Content="直线" IsChecked="True" Margin="5"/>
+                                    <RadioButton x:Name="RdoInterpArc" Content="圆弧" Margin="5"/>
+                                    <WrapPanel Margin="5">
+                                        <TextBlock Text="X/Y/Z:" VerticalAlignment="Center" Width="50"/>
+                                        <TextBox x:Name="TxtInterpX" Text="50000" Width="70"/>
+                                        <TextBox x:Name="TxtInterpY" Text="50000" Width="70" Margin="5,0"/>
+                                        <TextBox x:Name="TxtInterpZ" Text="0" Width="70" Margin="5,0"/>
+                                    </WrapPanel>
+                                    <WrapPanel Margin="5">
+                                        <TextBlock Text="A/半径:" VerticalAlignment="Center" Width="60"/>
+                                        <TextBox x:Name="TxtInterpA" Text="0" Width="70"/>
+                                        <TextBlock Text="方向:" VerticalAlignment="Center" Margin="5,0"/>
+                                        <ComboBox x:Name="CboInterpDir" SelectedIndex="0" Width="80">
+                                            <ComboBoxItem Content="CW"/>
+                                            <ComboBoxItem Content="CCW"/>
+                                        </ComboBox>
+                                    </WrapPanel>
+                                    <Button x:Name="BtnInterpAddLine" Content="添加直线段" Click="BtnInterpAddLine_Click" Width="150" Margin="5"/>
+                                    <Button x:Name="BtnInterpAddArc" Content="添加圆弧段" Click="BtnInterpAddArc_Click" Width="150" Margin="5"/>
+                                </StackPanel>
+                            </GroupBox>
+                            <WrapPanel Margin="5">
+                                <Button x:Name="BtnInterpStart" Content="启动插补" Click="BtnInterpStart_Click" Width="120" Background="#4488FF" Foreground="White"/>
+                                <Button x:Name="BtnInterpSmoothStop" Content="平滑停止" Click="BtnInterpSmoothStop_Click" Width="90" Margin="5,0"/>
+                                <Button x:Name="BtnInterpStop" Content="紧急停止" Click="BtnInterpStop_Click" Width="90" Background="#FF4444" Foreground="White"/>
+                            </WrapPanel>
+                        </StackPanel>
+                        <GroupBox Grid.Column="1" Header="插补状态">
+                            <StackPanel Margin="10">
+                                <TextBlock x:Name="TxtInterpStatus" Text="未建立坐标系" FontSize="13"/>
+                                <TextBlock x:Name="TxtInterpPos" Text="位置: -" FontSize="13"/>
+                                <TextBlock x:Name="TxtInterpVel" Text="速度: -" FontSize="13"/>
+                                <TextBlock x:Name="TxtInterpSpace" Text="缓存空间: -" FontSize="13"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Tab 9: 状态监控 -->
+            <TabItem Header="状态监控">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="轴:" VerticalAlignment="Center" FontSize="14" FontWeight="Bold"/>
+                        <ComboBox x:Name="CboMonitorAxis" SelectedIndex="0" Width="80" Margin="5,0"/>
+                        <Button x:Name="BtnMonitorRefresh" Content="刷新" Click="BtnMonitorRefresh_Click" Width="60" Margin="5,0"/>
+                        <CheckBox x:Name="ChkAutoRefresh" Content="自动刷新(200ms)" IsChecked="True" Margin="10,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <GroupBox Grid.Row="1" Header="实时状态" Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="5">
+                                <TextBlock Text="状态标志" FontWeight="Bold" Margin="0,0,0,5"/>
+                                <TextBlock x:Name="MonPlusLimit"><Run Text="正限位:"/> <Run x:Name="MonPlusLimitVal" Text="-"/></TextBlock>
+                                <TextBlock x:Name="MonMinusLimit"><Run Text="负限位:"/> <Run x:Name="MonMinusLimitVal" Text="-"/></TextBlock>
+                                <TextBlock x:Name="MonAxisAlarm"><Run Text="轴报警:"/> <Run x:Name="MonAxisAlarmVal" Text="-"/></TextBlock>
+                                <TextBlock x:Name="MonFollowAlarm"><Run Text="跟随误差报警:"/> <Run x:Name="MonFollowAlarmVal" Text="-"/></TextBlock>
+                                <TextBlock x:Name="MonSmoothStop"><Run Text="平滑停止触发:"/> <Run x:Name="MonSmoothStopVal" Text="-"/></TextBlock>
+                                <TextBlock x:Name="MonScram"><Run Text="急停:"/> <Run x:Name="MonScramVal" Text="-"/></TextBlock>
+                                <TextBlock x:Name="MonEnabled"><Run Text="使能:"/> <Run x:Name="MonEnabledVal" Text="-"/></TextBlock>
+                                <TextBlock x:Name="MonPlanning"><Run Text="运动中:"/> <Run x:Name="MonPlanningVal" Text="-"/></TextBlock>
+                                <TextBlock x:Name="MonMotionType"><Run Text="运动模式:"/> <Run x:Name="MonMotionTypeVal" Text="-"/></TextBlock>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="5">
+                                <TextBlock Text="位置数据" FontWeight="Bold" Margin="0,0,0,5"/>
+                                <TextBlock x:Name="MonPlanPos"><Run Text="规划位置:"/> <Run x:Name="MonPlanPosVal" Text="-"/></TextBlock>
+                                <TextBlock x:Name="MonDrivePos"><Run Text="驱动位置:"/> <Run x:Name="MonDrivePosVal" Text="-"/></TextBlock>
+                                <TextBlock x:Name="MonFollowErr"><Run Text="跟随误差:"/> <Run x:Name="MonFollowErrVal" Text="-"/></TextBlock>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Margin="5">
+                                <TextBlock Text="速度/加速度" FontWeight="Bold" Margin="0,0,0,5"/>
+                                <TextBlock x:Name="MonPlanVel"><Run Text="规划速度:"/> <Run x:Name="MonPlanVelVal" Text="-"/></TextBlock>
+                                <TextBlock x:Name="MonDriveVel"><Run Text="驱动速度:"/> <Run x:Name="MonDriveVelVal" Text="-"/></TextBlock>
+                                <TextBlock x:Name="MonPlanAcc"><Run Text="规划加速度:"/> <Run x:Name="MonPlanAccVal" Text="-"/></TextBlock>
+                                <TextBlock x:Name="MonDriveAcc"><Run Text="驱动加速度:"/> <Run x:Name="MonDriveAccVal" Text="-"/></TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Grid.Row="2" Header="日志">
+                        <TextBox x:Name="TxtLog" IsReadOnly="True" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" FontSize="12"/>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <StatusBar Grid.Row="2" Background="#2D2D30" Height="28">
+            <StatusBarItem>
+                <TextBlock x:Name="LblStatus" Text="就绪" Foreground="White"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
