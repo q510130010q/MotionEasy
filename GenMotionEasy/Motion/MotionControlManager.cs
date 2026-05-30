@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GenMotionEasy.Motion
@@ -11,6 +12,7 @@ namespace GenMotionEasy.Motion
     public class MotionControlManager
     {
         private readonly Dictionary<int, AxisController> _axisControllers = new Dictionary<int, AxisController>();
+        private short _core = 1;
 
         private readonly object _lock = new object();
 
@@ -22,7 +24,31 @@ namespace GenMotionEasy.Motion
 
         public bool Open()
         {
-            return mc.GTN_Open(5, 2) == 0 ? true : false;
+            if (mc.GTN_Open(5, 1) != 0)
+                return false;
+            mc.GTN_Reset(_core);
+            return true;
+        }
+
+        public short EcatLoad()
+        {
+            mc.GTN_TerminateEcatComm(_core);
+            return mc.GTN_InitEcatComm(_core);
+        }
+
+        public short EcatState(out short state)
+        {
+            return mc.GTN_IsEcatReady(_core, out state);
+        }
+
+        public short EcatStart()
+        {
+            return mc.GTN_StartEcatComm(_core);
+        }
+
+        public void Close()
+        {
+            mc.GTN_Stop(_core, 0xFFF, 0xFFF);
         }
 
         public void AddAxis(short axisId, short core)

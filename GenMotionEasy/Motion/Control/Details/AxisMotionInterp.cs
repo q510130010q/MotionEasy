@@ -39,8 +39,8 @@ namespace GenMotionEasy.Motion.Control.Details
         /// <param name="originPos1">原点位置1</param>
         /// <param name="originPos2">原点位置2</param>
         public void SetupCrd2D(short profile1, short profile2,
-            double synVelMax, double synAccMax, short evenTime = 4,
-            short setOriginFlag = 0, int originPos1 = 0, int originPos2 = 0)
+            double synVelMax, double synAccMax, short evenTime = 10,
+            short setOriginFlag = 1, int originPos1 = 0, int originPos2 = 0)
         {
             lock (_lock)
             {
@@ -66,7 +66,6 @@ namespace GenMotionEasy.Motion.Control.Details
                 crdPrm.originPos6 = 0;
                 crdPrm.originPos7 = 0;
                 crdPrm.originPos8 = 0;
-
                 GtnErrorHelper.ThrowIfError(GTN_SetCrdPrm(_core, _crd, ref crdPrm), "GTN_SetCrdPrm");
             }
         }
@@ -75,8 +74,8 @@ namespace GenMotionEasy.Motion.Control.Details
         /// 建立坐标系（3维）
         /// </summary>
         public void SetupCrd3D(short profile1, short profile2, short profile3,
-            double synVelMax, double synAccMax, short evenTime = 4,
-            short setOriginFlag = 0, int originPos1 = 0, int originPos2 = 0, int originPos3 = 0)
+            double synVelMax, double synAccMax, short evenTime = 10,
+            short setOriginFlag = 1, int originPos1 = 0, int originPos2 = 0, int originPos3 = 0)
         {
             lock (_lock)
             {
@@ -111,8 +110,8 @@ namespace GenMotionEasy.Motion.Control.Details
         /// 建立坐标系（4维）
         /// </summary>
         public void SetupCrd4D(short profile1, short profile2, short profile3, short profile4,
-            double synVelMax, double synAccMax, short evenTime = 4,
-            short setOriginFlag = 0, int originPos1 = 0, int originPos2 = 0, int originPos3 = 0, int originPos4 = 0)
+            double synVelMax, double synAccMax, short evenTime = 10,
+            short setOriginFlag = 1, int originPos1 = 0, int originPos2 = 0, int originPos3 = 0, int originPos4 = 0)
         {
             lock (_lock)
             {
@@ -400,7 +399,7 @@ namespace GenMotionEasy.Motion.Control.Details
         {
             lock (_lock)
             {
-                short mask = (short)(1 << _crd);
+                short mask = (short)(1 << (_crd - 1));
                 GtnErrorHelper.ThrowIfError(GTN_CrdStart(_core, mask, option), "GTN_CrdStart");
             }
         }
@@ -413,7 +412,7 @@ namespace GenMotionEasy.Motion.Control.Details
         {
             lock (_lock)
             {
-                short mask = (short)(1 << _crd);
+                short mask = (short)(1 << (_crd - 1));
                 GtnErrorHelper.ThrowIfError(GTN_CrdStartStep(_core, mask, option), "GTN_CrdStartStep");
             }
         }
@@ -619,7 +618,7 @@ namespace GenMotionEasy.Motion.Control.Details
         /// <param name="link">前瞻连接方式</param>
         /// <param name="threshold">前瞻阈值</param>
         /// <param name="lookaheadInMc">控制器内前瞻使能</param>
-        public void EnableLookAhead(short fifo = 0, short link = 0, ushort threshold = 50, short lookaheadInMc = 0)
+        public void EnableLookAhead(short fifo = 0, short link = 1, ushort threshold = 50, short lookaheadInMc = 0)
         {
             lock (_lock)
             {
@@ -695,7 +694,7 @@ namespace GenMotionEasy.Motion.Control.Details
         {
             lock (_lock)
             {
-                short mask = (short)(1 << _crd);
+                short mask = (short)(1 << (_crd - 1));
                 GtnErrorHelper.ThrowIfError(GTN_CrdStart(_core, mask, option), "GTN_CrdStart");
             }
         }
@@ -708,7 +707,7 @@ namespace GenMotionEasy.Motion.Control.Details
         {
             lock (_lock)
             {
-                short mask = (short)(1 << _crd);
+                short mask = (short)(1 << (_crd - 1));
                 GtnErrorHelper.ThrowIfError(GTN_CrdStartStep(_core, mask, option), "GTN_CrdStartStep");
             }
         }
@@ -786,7 +785,7 @@ namespace GenMotionEasy.Motion.Control.Details
         {
             lock (_lock)
             {
-                short mask = (short)(1 << _crd);
+                short mask = (short)(1 << (_crd - 1));
                 GtnErrorHelper.ThrowIfError(GTN_Stop(_core, mask, 0), "GTN_Stop");
             }
         }
@@ -798,7 +797,7 @@ namespace GenMotionEasy.Motion.Control.Details
         {
             lock (_lock)
             {
-                short mask = (short)(1 << _crd);
+                short mask = (short)(1 << (_crd - 1));
                 GtnErrorHelper.ThrowIfError(GTN_Stop(_core, mask, mask), "GTN_Stop");
             }
         }

@@ -4,6 +4,7 @@ using GenMotionEasy.Motion.Control;
 using GenMotionEasy.Tool;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -38,11 +39,14 @@ namespace GenDemo
         private void PopulateAxisComboBoxes()
         {
             var items = new[] { "轴1", "轴2", "轴3", "轴4", "轴5", "轴6", "轴7", "轴8" };
-            foreach (var cbo in new[] { CboAxisCtrl, CboHomeAxis, CboMoveAxis, CboPtAxis, CboPvtAxis, CboGearSlave, CboFollowAxis, CboMonitorAxis,
-                CboInterpAxis1, CboInterpAxis2, CboInterpAxis3, CboInterpAxis4 })
+            foreach (var cbo in new[] { CboAxisCtrl, CboHomeAxis, CboMoveAxis, CboPtAxis, CboPvtAxis, CboGearSlave, CboFollowAxis, CboMonitorAxis })
             {
                 cbo.ItemsSource = items;
                 cbo.SelectedIndex = 0;
+            }
+            foreach (var cbo in new[] { CboInterpAxis1, CboInterpAxis2, CboInterpAxis3, CboInterpAxis4 })
+            {
+                cbo.ItemsSource = items;
             }
         }
 
@@ -85,7 +89,7 @@ namespace GenDemo
 
         private int SelectedAxis(ComboBox cbo)
         {
-            return cbo.SelectedIndex;
+            return cbo.SelectedIndex + 1;
         }
 
         #region 连接与初始化
@@ -95,15 +99,31 @@ namespace GenDemo
             try
             {
                 _motionManager = new MotionControlManager();
-                if (_motionManager.Open())
+                if (!_motionManager.Open())
                 {
-                    SetConnectedState(true);
-                    Log("控制器打开成功");
+                    Log("打开控制器失败");
+                    return;
                 }
-                else
+                _motionManager.AddAxis(1, 1);
+                _motionManager.AddAxis(2, 1);
+                _motionManager.AddAxis(3, 1);
+                _motionManager.EcatLoad();
+                short state = 0;
+                for (int i = 0; i < 20; i++)
                 {
-                    Log("控制器打开失败");
+                    Thread.Sleep(500);
+                    _motionManager.EcatState(out state);
+                    if (state == 1) break;
                 }
+                if (state != 1)
+                {
+                    Log("EtherCAT总线未就绪");
+                    return;
+                }
+
+                _motionManager.EcatStart();
+                SetConnectedState(true);
+                Log("控制器打开成功");
             }
             catch (Exception ex)
             {
@@ -134,7 +154,7 @@ namespace GenDemo
                 _axisCount = CboAxisCount.SelectedIndex + 1;
                 for (int i = 0; i < _axisCount; i++)
                 {
-                    _motionManager!.AddAxis((short)i, 1);
+                    _motionManager!.AddAxis((short)(i + 1), 1);
                 }
                 Log($"已初始化 {_axisCount} 个轴");
 
@@ -677,8 +697,8 @@ namespace GenDemo
         {
             try
             {
-                var a1 = (short)CboInterpAxis1.SelectedIndex;
-                var a2 = (short)CboInterpAxis2.SelectedIndex;
+                var a1 = (short)(CboInterpAxis1.SelectedIndex + 1);
+                var a2 = (short)(CboInterpAxis2.SelectedIndex + 1);
                 var synVel = double.Parse(TxtInterpSynVel.Text);
                 var synAcc = double.Parse(TxtInterpSynAcc.Text);
                 var dim = CboInterpDim.SelectedIndex;
@@ -689,18 +709,18 @@ namespace GenDemo
                 {
                     case 0:
                         axis1.Interp.SetupCrd2D(a1, a2, synVel, synAcc);
-                        Log($"建立2D坐标系: 轴{a1 + 1}, 轴{a2 + 1}");
+                        Log($"建立2D坐标系: 轴{a1}, 轴{a2}");
                         break;
                     case 1:
-                        var a3 = (short)CboInterpAxis3.SelectedIndex;
+                        var a3 = (short)(CboInterpAxis3.SelectedIndex + 1);
                         axis1.Interp.SetupCrd3D(a1, a2, a3, synVel, synAcc);
-                        Log($"建立3D坐标系: 轴{a1 + 1}, 轴{a2 + 1}, 轴{a3 + 1}");
+                        Log($"建立3D坐标系: 轴{a1}, 轴{a2}, 轴{a3}");
                         break;
                     case 2:
-                        var a3b = (short)CboInterpAxis3.SelectedIndex;
-                        var a4 = (short)CboInterpAxis4.SelectedIndex;
+                        var a3b = (short)(CboInterpAxis3.SelectedIndex + 1);
+                        var a4 = (short)(CboInterpAxis4.SelectedIndex + 1);
                         axis1.Interp.SetupCrd4D(a1, a2, a3b, a4, synVel, synAcc);
-                        Log($"建立4D坐标系: 轴{a1 + 1}, 轴{a2 + 1}, 轴{a3b + 1}, 轴{a4 + 1}");
+                        Log($"建立4D坐标系: 轴{a1}, 轴{a2}, 轴{a3b}, 轴{a4}");
                         break;
                 }
 
@@ -716,7 +736,7 @@ namespace GenDemo
             try
             {
                 if (!_interpSetup) return;
-                var axis = GetAxis(CboInterpAxis1.SelectedIndex);
+                var axis = GetAxis(CboInterpAxis1.SelectedIndex + 1);
                 axis.Interp.OfflineClear();
                 Log("插补轨迹已清除");
             }
@@ -729,7 +749,7 @@ namespace GenDemo
             {
                 if (!_interpSetup) { Log("请先建立坐标系"); return; }
 
-                var axis = GetAxis(CboInterpAxis1.SelectedIndex);
+                var axis = GetAxis(CboInterpAxis1.SelectedIndex + 1);
                 var synVel = double.Parse(TxtInterpSynVel.Text);
                 var synAcc = double.Parse(TxtInterpSynAcc.Text);
                 var velEnd = double.Parse(TxtInterpVelEnd.Text);
@@ -768,7 +788,7 @@ namespace GenDemo
             {
                 if (!_interpSetup) { Log("请先建立坐标系"); return; }
 
-                var axis = GetAxis(CboInterpAxis1.SelectedIndex);
+                var axis = GetAxis(CboInterpAxis1.SelectedIndex + 1);
                 var synVel = double.Parse(TxtInterpSynVel.Text);
                 var synAcc = double.Parse(TxtInterpSynAcc.Text);
                 var velEnd = double.Parse(TxtInterpVelEnd.Text);
@@ -792,7 +812,7 @@ namespace GenDemo
             {
                 if (!_interpSetup) { Log("请先建立坐标系"); return; }
 
-                var axis = GetAxis(CboInterpAxis1.SelectedIndex);
+                var axis = GetAxis(CboInterpAxis1.SelectedIndex + 1);
                 axis.Interp.OfflineStart();
                 TxtInterpStatus.Text = "插补运行中...";
                 TxtInterpStatus.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Orange);
@@ -806,7 +826,7 @@ namespace GenDemo
             try
             {
                 if (!_interpSetup) return;
-                var axis = GetAxis(CboInterpAxis1.SelectedIndex);
+                var axis = GetAxis(CboInterpAxis1.SelectedIndex + 1);
                 axis.Interp.SmoothStop();
                 TxtInterpStatus.Text = "平滑停止";
                 Log("插补平滑停止");
@@ -819,11 +839,115 @@ namespace GenDemo
             try
             {
                 if (!_interpSetup) return;
-                var axis = GetAxis(CboInterpAxis1.SelectedIndex);
+                var axis = GetAxis(CboInterpAxis1.SelectedIndex + 1);
                 axis.Interp.EmergencyStop();
                 TxtInterpStatus.Text = "紧急停止";
                 TxtInterpStatus.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
                 Log("插补紧急停止");
+            }
+            catch (Exception ex) { Log(ex.Message); }
+        }
+
+        #endregion
+
+        #region 实时插补
+
+        private DispatcherTimer? _interpRtTimer;
+        private double _rtPosX, _rtPosY, _rtPosZ;
+        private bool _interpRtRunning;
+
+        private void BtnInterpRtStart_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!_interpSetup) { Log("请先建立坐标系"); return; }
+                if (_interpRtRunning) { Log("实时插补已在运行"); return; }
+
+                var axis = GetAxis(CboInterpAxis1.SelectedIndex + 1);
+
+                switch (CboInterpBufMode.SelectedIndex)
+                {
+                    case 0: axis.Interp.SetDynamicBufferMode(); break;
+                    case 1: axis.Interp.SetDynamicKeepBufferMode(); break;
+                }
+
+                if (ChkInterpLookAhead.IsChecked == true)
+                    axis.Interp.EnableLookAhead();
+                else
+                    axis.Interp.DisableLookAhead();
+
+                var ratio = double.Parse(TxtInterpOverride.Text);
+                axis.Interp.SetOverride(ratio);
+
+                _rtPosX = 0;
+                _rtPosY = 0;
+                _rtPosZ = 0;
+                _interpRtRunning = true;
+
+                var interval = int.Parse(TxtInterpRtInterval.Text);
+                _interpRtTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(interval) };
+                _interpRtTimer.Tick += InterpRtTimer_Tick;
+                _interpRtTimer.Start();
+
+                axis.Interp.Start();
+
+                TxtInterpStatus.Text = "实时插补运行中...";
+                TxtInterpStatus.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Orange);
+                Log("实时插补启动");
+            }
+            catch (Exception ex) { Log(ex.Message); }
+        }
+
+        private void InterpRtTimer_Tick(object? sender, EventArgs e)
+        {
+            try
+            {
+                var axis = GetAxis(CboInterpAxis1.SelectedIndex + 1);
+                var step = int.Parse(TxtInterpRtStep.Text);
+                var synVel = double.Parse(TxtInterpSynVel.Text);
+                var synAcc = double.Parse(TxtInterpSynAcc.Text);
+                var velEnd = double.Parse(TxtInterpVelEnd.Text);
+
+                _rtPosX += step;
+                _rtPosY += step;
+
+                var dim = CboInterpDim.SelectedIndex;
+                switch (dim)
+                {
+                    case 0:
+                        axis.Interp.LnXY((int)_rtPosX, (int)_rtPosY, synVel, synAcc, velEnd);
+                        break;
+                    case 1:
+                        _rtPosZ += step;
+                        axis.Interp.LnXYZ((int)_rtPosX, (int)_rtPosY, (int)_rtPosZ, synVel, synAcc, velEnd);
+                        break;
+                    case 2:
+                        _rtPosZ += step;
+                        var a = int.Parse(TxtInterpA.Text);
+                        axis.Interp.LnXYZA((int)_rtPosX, (int)_rtPosY, (int)_rtPosZ, a, synVel, synAcc, velEnd);
+                        break;
+                }
+
+                var space = axis.Interp.GetCrdSpace();
+                TxtInterpSpace.Text = $"缓存空间: {space}";
+            }
+            catch (Exception ex) { Log(ex.Message); }
+        }
+
+        private void BtnInterpRtStop_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!_interpRtRunning) return;
+                _interpRtRunning = false;
+                _interpRtTimer?.Stop();
+
+                var axis = GetAxis(CboInterpAxis1.SelectedIndex + 1);
+                axis.Interp.SmoothStop();
+
+                TxtInterpStatus.Text = "实时插补已停止";
+                TxtInterpStatus.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Gray);
+                Log("实时插补停止");
             }
             catch (Exception ex) { Log(ex.Message); }
         }
