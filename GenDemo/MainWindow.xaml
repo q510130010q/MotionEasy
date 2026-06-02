@@ -634,6 +634,103 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
+            <!-- Tab 10: 扩展模块 (gL500) -->
+            <TabItem Header="扩展模块">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Width="340" Margin="0,0,10,0">
+                            <GroupBox Header="初始化" Margin="0,0,0,5">
+                                <StackPanel>
+                                    <WrapPanel Margin="3">
+                                        <Button x:Name="BtnExtInit" Content="初始化扩展模块" Click="BtnExtInit_Click" Width="140" Margin="2" Background="#4488FF" Foreground="White"/>
+                                        <Button x:Name="BtnExtDeInit" Content="去初始化" Click="BtnExtDeInit_Click" Width="90" Margin="2" IsEnabled="False"/>
+                                    </WrapPanel>
+                                    <TextBlock x:Name="TxtExtSlaveCount" Text="在线从站数: -" Margin="5"/>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Header="数字输出 (DO) 点击切换" Margin="0,0,0,5">
+                                <StackPanel>
+                                    <WrapPanel x:Name="WpExtDo" Margin="2"/>
+                                    <CheckBox x:Name="ChkExtAutoRefresh" Content="自动刷新(300ms)" IsChecked="True" Margin="5"/>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Header="模拟输出 (AO)">
+                                <StackPanel>
+                                    <WrapPanel x:Name="WpExtAo" Margin="2"/>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <GroupBox Header="数字输入 (DI)" Margin="0,0,0,5">
+                                <WrapPanel x:Name="WpExtDi" Margin="2"/>
+                            </GroupBox>
+                            <GroupBox Header="模拟输入 (AI)">
+                                <WrapPanel x:Name="WpExtAi" Margin="2"/>
+                            </GroupBox>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Tab 11: EcatIO模块 -->
+            <TabItem Header="EcatIO模块">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Width="340" Margin="0,0,10,0">
+                            <GroupBox Header="远程IO操作" Margin="0,0,0,5">
+                                <StackPanel>
+                                    <WrapPanel Margin="3">
+                                        <TextBlock Text="从站号:" VerticalAlignment="Center"/>
+                                        <TextBox x:Name="TxtEcatIOSlaveNo" Text="0" Width="50" Margin="3,0"/>
+                                    </WrapPanel>
+                                    <WrapPanel Margin="3">
+                                        <TextBlock Text="数据(HEX):" VerticalAlignment="Center"/>
+                                        <TextBox x:Name="TxtEcatIOData" Text="00 00" Width="120" Margin="3,0"/>
+                                    </WrapPanel>
+                                    <WrapPanel Margin="3">
+                                        <Button x:Name="BtnEcatIOReadInput" Content="读取输入" Click="BtnEcatIOReadInput_Click" Width="90" Margin="2"/>
+                                        <Button x:Name="BtnEcatIOReadOutput" Content="读取输出" Click="BtnEcatIOReadOutput_Click" Width="90" Margin="2"/>
+                                        <Button x:Name="BtnEcatIOWrite" Content="写入输出" Click="BtnEcatIOWrite_Click" Width="90" Margin="2" Background="#4488FF" Foreground="White"/>
+                                    </WrapPanel>
+                                    <CheckBox x:Name="ChkEcatIOAutoRefresh" Content="自动刷新(300ms)" IsChecked="True" Margin="5"/>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Header="单Bit操作" Margin="0,0,0,5">
+                                <StackPanel>
+                                    <WrapPanel Margin="3">
+                                        <TextBlock Text="Bit索引(0-15):" VerticalAlignment="Center"/>
+                                        <TextBox x:Name="TxtEcatIOBitIdx" Text="0" Width="50" Margin="3,0"/>
+                                    </WrapPanel>
+                                    <WrapPanel Margin="3">
+                                        <TextBlock Text="值(0/1):" VerticalAlignment="Center"/>
+                                        <TextBox x:Name="TxtEcatIOBitVal" Text="1" Width="50" Margin="3,0"/>
+                                    </WrapPanel>
+                                    <WrapPanel Margin="3">
+                                        <Button x:Name="BtnEcatIOBitRead" Content="读输入Bit" Click="BtnEcatIOBitRead_Click" Width="90" Margin="2"/>
+                                        <Button x:Name="BtnEcatIOBitWrite" Content="写输出Bit" Click="BtnEcatIOBitWrite_Click" Width="90" Margin="2" Background="#4488FF" Foreground="White"/>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Header="数字输出 (DO) 点击切换">
+                                <WrapPanel x:Name="WpEcatIODo" Margin="2"/>
+                            </GroupBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <GroupBox Header="数字输入 (DI)">
+                                <WrapPanel x:Name="WpEcatIODi" Margin="2"/>
+                            </GroupBox>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
         </TabControl>
 
         <StatusBar Grid.Row="2" Background="#2D2D30" Height="28">

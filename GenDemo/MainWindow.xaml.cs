@@ -38,6 +38,23 @@ namespace GenDemo
         // 当前是否已连接到控制器
         private bool _isConnected;
 
+        // 扩展模块定时器（自动刷新DI/AI状态）
+        private DispatcherTimer? _extTimer;
+        // EcatIO模块定时器（自动刷新DI显示）
+        private DispatcherTimer? _ecatIOTimer;
+        // 扩展模块的16个DO按钮
+        private Button[] _extDoBtns = new Button[16];
+        // 扩展模块的16个DI标签
+        private Label[] _extDiLabels = new Label[16];
+        // 扩展模块的6个AI标签
+        private Label[] _extAiLabels = new Label[6];
+        // 扩展模块的6个AO输入框
+        private TextBox[] _extAoTbs = new TextBox[6];
+        // EcatIO模块的16个DO按钮
+        private Button[] _ecatDoBtns = new Button[16];
+        // EcatIO模块的16个DI标签
+        private Label[] _ecatDiLabels = new Label[16];
+
         // 构造函数：窗口创建时自动调用
         public MainWindow()
         {
@@ -63,6 +80,11 @@ namespace GenDemo
 
             // 把8个轴的名字（"轴1"到"轴8"）填充到所有下拉选择框中
             PopulateAxisComboBoxes();
+
+            // 创建扩展模块的IO控件（DO按钮、DI标签、AI标签、AO输入框）
+            CreateExpansionIOControls();
+            // 创建EcatIO模块的IO控件（DO按钮、DI标签）
+            CreateEcatIOControls();
         }
 
         // 把所有下拉框都填上"轴1"~"轴8"的选项
@@ -1279,6 +1301,351 @@ namespace GenDemo
             valText.Foreground = isAlarm
                 ? new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red)
                 : new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.LimeGreen);
+        }
+
+        #endregion
+
+        #region 扩展模块 (gL500)
+
+        private void CreateExpansionIOControls()
+        {
+            var green = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.LimeGreen);
+            var gray = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Gray);
+
+            // 创建16个DO按钮（灰色=关闭，绿色=打开）
+            for (int i = 0; i < 16; i++)
+            {
+                var btn = new Button
+                {
+                    Content = $"DO{i}",
+                    Width = 55,
+                    Height = 28,
+                    Margin = new System.Windows.Thickness(2),
+                    Background = gray,
+                    Foreground = System.Windows.Media.Brushes.White,
+                    Tag = i
+                };
+                btn.Click += BtnExtDo_Click;
+                _extDoBtns[i] = btn;
+                WpExtDo.Children.Add(btn);
+            }
+
+            // 创建16个DI标签（灰色=0，绿色=1）
+            for (int i = 0; i < 16; i++)
+            {
+                var lbl = new Label
+                {
+                    Content = $"DI{i}: 0",
+                    Width = 65,
+                    Margin = new System.Windows.Thickness(2),
+                    Foreground = gray
+                };
+                _extDiLabels[i] = lbl;
+                WpExtDi.Children.Add(lbl);
+            }
+
+            // 创建6个AI显示标签
+            for (int i = 0; i < 6; i++)
+            {
+                var lbl = new Label
+                {
+                    Content = $"AI{i}: -",
+                    Width = 100,
+                    Margin = new System.Windows.Thickness(2)
+                };
+                _extAiLabels[i] = lbl;
+                WpExtAi.Children.Add(lbl);
+            }
+
+            // 创建6个AO输入框+设置按钮
+            for (int i = 0; i < 6; i++)
+            {
+                var idx = i;
+                var tb = new TextBox { Text = "0", Width = 70, Margin = new System.Windows.Thickness(2) };
+                var btn = new Button
+                {
+                    Content = $"AO{idx} 设置",
+                    Width = 70,
+                    Height = 24,
+                    Margin = new System.Windows.Thickness(2),
+                    Tag = idx
+                };
+                btn.Click += BtnExtAoSet_Click;
+                _extAoTbs[idx] = tb;
+                WpExtAo.Children.Add(new Label { Content = $"CH{idx}:", Width = 35 });
+                WpExtAo.Children.Add(tb);
+                WpExtAo.Children.Add(btn);
+            }
+
+            // 创建扩展模块定时器
+            _extTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
+            _extTimer.Tick += ExtTimer_Tick;
+        }
+
+        private async void BtnExtInit_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_motionManager == null) { Log("请先打开控制器"); return; }
+                var rtn = _motionManager.Expansion.Init(0);
+                if (rtn != 0) { Log($"扩展模块初始化失败: {rtn}"); return; }
+                // 查询在线从站数量
+                var count = _motionManager.Expansion.GetOnlineSlaveCount();
+                TxtExtSlaveCount.Text = $"在线从站数: {count}";
+                BtnExtInit.IsEnabled = false;
+                BtnExtDeInit.IsEnabled = true;
+                // 启动定时器自动刷新
+                _extTimer?.Start();
+                Log("扩展模块初始化成功");
+            }
+            catch (Exception ex) { Log(ex.Message); }
+        }
+
+        private void BtnExtDeInit_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _extTimer?.Stop();
+                _motionManager?.Expansion.DeInit();
+                TxtExtSlaveCount.Text = "在线从站数: -";
+                BtnExtInit.IsEnabled = true;
+                BtnExtDeInit.IsEnabled = false;
+                Log("扩展模块已去初始化");
+            }
+            catch (Exception ex) { Log(ex.Message); }
+        }
+
+        private void BtnExtDo_Click(object? sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_motionManager == null) return;
+                var btn = (Button)sender!;
+                var idx = (int)btn.Tag;
+                // 切换当前状态（取反：原来0变1，原来1变0）
+                var current = btn.Background.ToString() == "#FF00FF00" ? (byte)1 : (byte)0;
+                var newVal = current == 0 ? (byte)1 : (byte)0;
+                _motionManager.Expansion.SetDoBit(0, (short)idx, newVal);
+                btn.Background = newVal == 1
+                    ? new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.LimeGreen)
+                    : new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Gray);
+                Log($"扩展DO{idx} -> {newVal}");
+            }
+            catch (Exception ex) { Log(ex.Message); }
+        }
+
+        private void BtnExtAoSet_Click(object? sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_motionManager == null) return;
+                var btn = (Button)sender!;
+                var idx = (int)btn.Tag;
+                var val = short.Parse(_extAoTbs[idx].Text);
+                _motionManager.Expansion.WriteAo(0, (ushort)idx, new short[] { val });
+                Log($"扩展AO{idx} 已设置: {val}");
+            }
+            catch (Exception ex) { Log(ex.Message); }
+        }
+
+        private void ExtTimer_Tick(object? sender, EventArgs e)
+        {
+            try
+            {
+                if (_motionManager == null || !ChkExtAutoRefresh.IsChecked == true) return;
+                // 读取DI（2个字节=16位）
+                var diData = _motionManager.Expansion.ReadDi(0, 0, 2);
+                if (diData.Length >= 2)
+                {
+                    for (int i = 0; i < 16; i++)
+                    {
+                        var bit = (diData[i / 8] >> (i % 8)) & 1;
+                        _extDiLabels[i].Content = $"DI{i}: {bit}";
+                        _extDiLabels[i].Foreground = bit == 1
+                            ? new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.LimeGreen)
+                            : new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Gray);
+                    }
+                }
+                // 读取AI（6个通道）
+                for (int i = 0; i < 6; i++)
+                {
+                    var aiVal = _motionManager.Expansion.ReadAi(0, (ushort)i, 1);
+                    _extAiLabels[i].Content = $"AI{i}: {aiVal[0]}";
+                }
+            }
+            catch { }
+        }
+
+        #endregion
+
+        #region EcatIO模块
+
+        private void CreateEcatIOControls()
+        {
+            var gray = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Gray);
+
+            // 创建16个DO按钮
+            for (int i = 0; i < 16; i++)
+            {
+                var btn = new Button
+                {
+                    Content = $"DO{i}",
+                    Width = 55,
+                    Height = 28,
+                    Margin = new System.Windows.Thickness(2),
+                    Background = gray,
+                    Foreground = System.Windows.Media.Brushes.White,
+                    Tag = i
+                };
+                btn.Click += BtnEcatDo_Click;
+                _ecatDoBtns[i] = btn;
+                WpEcatIODo.Children.Add(btn);
+            }
+
+            // 创建16个DI标签
+            for (int i = 0; i < 16; i++)
+            {
+                var lbl = new Label
+                {
+                    Content = $"DI{i}: 0",
+                    Width = 65,
+                    Margin = new System.Windows.Thickness(2),
+                    Foreground = gray
+                };
+                _ecatDiLabels[i] = lbl;
+                WpEcatIODi.Children.Add(lbl);
+            }
+
+            // 创建EcatIO定时器
+            _ecatIOTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
+            _ecatIOTimer.Tick += EcatIOTimer_Tick;
+        }
+
+        private void BtnEcatIOReadInput_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_motionManager == null) { Log("请先打开控制器"); return; }
+                var slaveNo = ushort.Parse(TxtEcatIOSlaveNo.Text);
+                var data = _motionManager.EcatIO.ReadInput(slaveNo, 0, 2);
+                TxtEcatIOData.Text = string.Join(" ", data.Select(b => b.ToString("X2")));
+                UpdateEcatIODiDisplay(data);
+                Log("EcatIO 读取输入成功");
+            }
+            catch (Exception ex) { Log(ex.Message); }
+        }
+
+        private void BtnEcatIOReadOutput_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_motionManager == null) { Log("请先打开控制器"); return; }
+                var slaveNo = ushort.Parse(TxtEcatIOSlaveNo.Text);
+                var data = _motionManager.EcatIO.ReadOutput(slaveNo, 0, 2);
+                TxtEcatIOData.Text = string.Join(" ", data.Select(b => b.ToString("X2")));
+                UpdateEcatIODoDisplay(data);
+                Log("EcatIO 读取输出成功");
+            }
+            catch (Exception ex) { Log(ex.Message); }
+        }
+
+        private void BtnEcatIOWrite_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_motionManager == null) { Log("请先打开控制器"); return; }
+                var slaveNo = ushort.Parse(TxtEcatIOSlaveNo.Text);
+                var hexStr = TxtEcatIOData.Text.Trim();
+                var bytes = hexStr.Split(' ').Select(s => Convert.ToByte(s, 16)).ToArray();
+                _motionManager.EcatIO.WriteOutput(slaveNo, 0, bytes);
+                Log("EcatIO 写入输出成功");
+            }
+            catch (Exception ex) { Log(ex.Message); }
+        }
+
+        private void BtnEcatDo_Click(object? sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_motionManager == null) return;
+                var btn = (Button)sender!;
+                var idx = (int)btn.Tag;
+                var slaveNo = ushort.Parse(TxtEcatIOSlaveNo.Text);
+                var current = btn.Background.ToString() == "#FF00FF00" ? (byte)1 : (byte)0;
+                var newVal = current == 0 ? (byte)1 : (byte)0;
+                _motionManager.EcatIO.WriteOutputBit(slaveNo, 0, (ushort)idx, newVal);
+                btn.Background = newVal == 1
+                    ? new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.LimeGreen)
+                    : new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Gray);
+                Log($"EcatIO DO{idx} -> {newVal}");
+            }
+            catch (Exception ex) { Log(ex.Message); }
+        }
+
+        private void BtnEcatIOBitRead_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_motionManager == null) { Log("请先打开控制器"); return; }
+                var slaveNo = ushort.Parse(TxtEcatIOSlaveNo.Text);
+                var idx = ushort.Parse(TxtEcatIOBitIdx.Text);
+                var val = _motionManager.EcatIO.ReadInputBit(slaveNo, 0, idx);
+                Log($"EcatIO 输入Bit[{idx}] = {val}");
+            }
+            catch (Exception ex) { Log(ex.Message); }
+        }
+
+        private void BtnEcatIOBitWrite_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_motionManager == null) { Log("请先打开控制器"); return; }
+                var slaveNo = ushort.Parse(TxtEcatIOSlaveNo.Text);
+                var idx = ushort.Parse(TxtEcatIOBitIdx.Text);
+                var val = byte.Parse(TxtEcatIOBitVal.Text);
+                _motionManager.EcatIO.WriteOutputBit(slaveNo, 0, idx, val);
+                Log($"EcatIO 输出Bit[{idx}] = {val}");
+            }
+            catch (Exception ex) { Log(ex.Message); }
+        }
+
+        private void EcatIOTimer_Tick(object? sender, EventArgs e)
+        {
+            try
+            {
+                if (_motionManager == null || !ChkEcatIOAutoRefresh.IsChecked == true) return;
+                var slaveNo = ushort.Parse(TxtEcatIOSlaveNo.Text);
+                var diData = _motionManager.EcatIO.ReadInput(slaveNo, 0, 2);
+                UpdateEcatIODiDisplay(diData);
+                var doData = _motionManager.EcatIO.ReadOutput(slaveNo, 0, 2);
+                UpdateEcatIODoDisplay(doData);
+            }
+            catch { }
+        }
+
+        private void UpdateEcatIODiDisplay(byte[] data)
+        {
+            if (data.Length < 2) return;
+            for (int i = 0; i < 16; i++)
+            {
+                var bit = (data[i / 8] >> (i % 8)) & 1;
+                _ecatDiLabels[i].Content = $"DI{i}: {bit}";
+                _ecatDiLabels[i].Foreground = bit == 1
+                    ? new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.LimeGreen)
+                    : new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Gray);
+            }
+        }
+
+        private void UpdateEcatIODoDisplay(byte[] data)
+        {
+            if (data.Length < 2) return;
+            for (int i = 0; i < 16; i++)
+            {
+                var bit = (data[i / 8] >> (i % 8)) & 1;
+                _ecatDoBtns[i].Background = bit == 1
+                    ? new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.LimeGreen)
+                    : new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Gray);
+            }
         }
 
         #endregion
