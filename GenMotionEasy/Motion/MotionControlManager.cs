@@ -16,9 +16,13 @@ namespace GenMotionEasy.Motion
 
         private readonly object _lock = new object();
 
+        public IExpansionIO Expansion { get; }
+        public IEcatIO EcatIO { get; }
+
         public MotionControlManager()
         {
-
+            Expansion = new ExpansionIO(_core, _lock);
+            EcatIO = new EcatIO(_core, _lock);
         }
 
 
