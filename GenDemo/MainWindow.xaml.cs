@@ -416,20 +416,63 @@ namespace GenDemo
 
         #region PT运动
 
+        private bool _ptModeSet;
+        private bool _ptDataPushed;
+        private DispatcherTimer? _ptRtTimer;
+        private double _ptRtPos, _ptRtVel, _ptRtTime;
+        private bool _ptRtStarted;
+
+        private void SetupPtMode()
+        {
+            var axis = GetAxis(SelectedAxis(CboPtAxis));
+
+            if (RdoPtStatic.IsChecked == true)
+                axis.PT.SetStaticMode();
+            else
+                axis.PT.SetDynamicMode();
+
+            if (RdoPtMemSmall.IsChecked == true)
+                axis.PT.SetMemorySmall();
+            else
+                axis.PT.SetMemoryLarge();
+
+            var loop = int.Parse(TxtPtLoop.Text);
+            axis.PT.SetLoop(loop);
+
+            axis.PT.Clear();
+
+            _ptModeSet = true;
+            _ptDataPushed = false;
+            TxtPtStatus.Text = "PT模式已设置";
+            TxtPtStatus.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Blue);
+            Log("PT模式设置完成");
+        }
+
         private void RdoPtMode_Checked(object sender, RoutedEventArgs e)
         {
+            _ptModeSet = false;
         }
 
         private void BtnPtPush_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                if (!_ptModeSet) SetupPtMode();
+
                 var axis = GetAxis(SelectedAxis(CboPtAxis));
                 var pos = double.Parse(TxtPtPos.Text);
                 var time = int.Parse(TxtPtTime.Text);
-                short segType = (short)CboPtSegType.SelectedIndex;
+                var segType = (short)CboPtSegType.SelectedIndex;
+
+                if (segType == 1 && !_ptDataPushed)
+                {
+                    Log("EVEN段需要前一段定义速度，已自动转为NORMAL");
+                    segType = 0;
+                }
 
                 axis.PT.PushData(pos, time, segType);
+                _ptDataPushed = true;
+
                 var space = axis.PT.GetSpace();
                 TxtPtSpace.Text = $"剩余空间: {space}";
                 Log($"PT推送数据: pos={pos}, time={time}ms, type={CboPtSegType.Text}");
@@ -443,6 +486,8 @@ namespace GenDemo
             {
                 var axis = GetAxis(SelectedAxis(CboPtAxis));
                 axis.PT.Clear();
+                _ptDataPushed = false;
+                TxtPtSpace.Text = "剩余空间: -";
                 Log("PT数据已清除");
             }
             catch (Exception ex) { Log(ex.Message); }
@@ -452,6 +497,8 @@ namespace GenDemo
         {
             try
             {
+                if (!_ptModeSet) SetupPtMode();
+
                 var axis = GetAxis(SelectedAxis(CboPtAxis));
                 var space = axis.PT.GetSpace();
                 TxtPtSpace.Text = $"剩余空间: {space}";
@@ -463,24 +510,88 @@ namespace GenDemo
         {
             try
             {
+                if (RdoPtDynamic.IsChecked == true)
+                {
+                    StartDynamicDemo();
+                    return;
+                }
+
+                if (!_ptModeSet) { SetupPtMode(); return; }
+
+                if (!_ptDataPushed)
+                {
+                    Log("请先推送数据再启动运动");
+                    return;
+                }
+
                 var axis = GetAxis(SelectedAxis(CboPtAxis));
-
-                if (RdoPtStatic.IsChecked == true)
-                    axis.PT.SetStaticMode();
-                else
-                    axis.PT.SetDynamicMode();
-
-                if (RdoPtMemSmall.IsChecked == true)
-                    axis.PT.SetMemorySmall();
-                else
-                    axis.PT.SetMemoryLarge();
-
-                var loop = int.Parse(TxtPtLoop.Text);
-                axis.PT.SetLoop(loop);
-
                 axis.PT.Start();
+                _ptModeSet = false;
+                _ptDataPushed = false;
                 TxtPtStatus.Text = "PT运动进行中...";
-                Log($"轴{CboPtAxis.SelectedIndex + 1} PT运动启动, 循环={loop}");
+                TxtPtStatus.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Orange);
+                Log($"轴{CboPtAxis.SelectedIndex + 1} PT运动启动");
+            }
+            catch (Exception ex) { Log(ex.Message); }
+        }
+
+        private void StartDynamicDemo()
+        {
+            if (_ptRtTimer != null)
+            {
+                Log("动态演示已在运行");
+                return;
+            }
+
+            var axis = GetAxis(SelectedAxis(CboPtAxis));
+            axis.PT.SetDynamicMode();
+            axis.PT.SetMemoryLarge();
+            axis.PT.Clear();
+
+            _ptRtPos = 0;
+            _ptRtVel = 0;
+            _ptRtTime = 0;
+            _ptRtStarted = false;
+
+            var interval = 50;
+            _ptRtTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(interval) };
+            _ptRtTimer.Tick += PtRtTimer_Tick;
+            _ptRtTimer.Start();
+
+            _ptModeSet = true;
+            TxtPtStatus.Text = "动态演示运行中...";
+            TxtPtStatus.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Orange);
+            Log("动态PT演示启动");
+        }
+
+        private void PtRtTimer_Tick(object? sender, EventArgs e)
+        {
+            try
+            {
+                var axis = GetAxis(SelectedAxis(CboPtAxis));
+                var space = axis.PT.GetSpace();
+
+                if (space > 0)
+                {
+                    var dt = 0.05;
+                    var a = 50000;
+                    var freq = 2 * Math.PI * 0.5;
+                    _ptRtTime += dt;
+                    var vel = a * Math.Sin(freq * _ptRtTime);
+                    _ptRtPos += (vel + _ptRtVel) * dt / 2;
+                    _ptRtVel = vel;
+
+                    axis.PT.PushData(_ptRtPos, (int)(_ptRtTime * 1000), 0);
+                    _ptDataPushed = true;
+                }
+
+                if (space <= 0 && !_ptRtStarted)
+                {
+                    axis.PT.Start();
+                    _ptRtStarted = true;
+                }
+
+                TxtPtSpace.Text = $"剩余空间: {space}";
             }
             catch (Exception ex) { Log(ex.Message); }
         }
@@ -489,9 +600,17 @@ namespace GenDemo
         {
             try
             {
+                _ptRtTimer?.Stop();
+                _ptRtTimer = null;
+                _ptRtStarted = false;
+
                 var axis = GetAxis(SelectedAxis(CboPtAxis));
                 axis.StopAxis();
+                axis.PT.Clear();
+                _ptModeSet = false;
+                _ptDataPushed = false;
                 TxtPtStatus.Text = "PT运动已停止";
+                TxtPtStatus.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Gray);
                 Log("PT运动停止");
             }
             catch (Exception ex) { Log(ex.Message); }
@@ -506,7 +625,7 @@ namespace GenDemo
             try
             {
                 var axis = GetAxis(SelectedAxis(CboPvtAxis));
-                var tableId = (short)CboPvtTable.SelectedIndex;
+                var tableId = (short)(CboPvtTable.SelectedIndex + 1);
                 var loop = int.Parse(TxtPvtLoop.Text);
                 var time = double.Parse(TxtPvtTime.Text) / 1000.0;
 
@@ -516,10 +635,6 @@ namespace GenDemo
                 var vel1 = double.Parse(TxtPvtVel1.Text);
                 var vel2 = double.Parse(TxtPvtVel2.Text);
                 var vel3 = double.Parse(TxtPvtVel3.Text);
-
-                axis.PVT.SetMode();
-                axis.PVT.SetLoop(loop);
-                axis.PVT.SelectTable(tableId);
 
                 switch (CboPvtMode.SelectedIndex)
                 {

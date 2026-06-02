@@ -165,15 +165,15 @@
                                 </WrapPanel>
                                 <WrapPanel Margin="5">
                                     <TextBlock Text="速度:" VerticalAlignment="Center" Width="80"/>
-                                    <TextBox x:Name="TxtMoveVel" Text="50000" Width="120"/>
+                                    <TextBox x:Name="TxtMoveVel" Text="50" Width="120"/>
                                 </WrapPanel>
                                 <WrapPanel Margin="5">
                                     <TextBlock Text="加速度:" VerticalAlignment="Center" Width="80"/>
-                                    <TextBox x:Name="TxtMoveAcc" Text="1000000" Width="120"/>
+                                    <TextBox x:Name="TxtMoveAcc" Text="1000" Width="120"/>
                                 </WrapPanel>
                                 <WrapPanel Margin="5">
                                     <TextBlock Text="减速度:" VerticalAlignment="Center" Width="80"/>
-                                    <TextBox x:Name="TxtMoveDec" Text="1000000" Width="120"/>
+                                    <TextBox x:Name="TxtMoveDec" Text="1000" Width="120"/>
                                 </WrapPanel>
                                 <WrapPanel Margin="5">
                                     <TextBlock Text="S曲线(%):" VerticalAlignment="Center" Width="80"/>
@@ -495,11 +495,11 @@
                                     </WrapPanel>
                                     <WrapPanel Margin="5">
                                         <TextBlock Text="合成最大速度:" VerticalAlignment="Center" Width="100"/>
-                                        <TextBox x:Name="TxtInterpSynVel" Text="100000" Width="80"/>
+                                        <TextBox x:Name="TxtInterpSynVel" Text="100" Width="80"/>
                                     </WrapPanel>
                                     <WrapPanel Margin="5">
                                         <TextBlock Text="合成最大加速度:" VerticalAlignment="Center" Width="100"/>
-                                        <TextBox x:Name="TxtInterpSynAcc" Text="1000000" Width="80"/>
+                                        <TextBox x:Name="TxtInterpSynAcc" Text="1000" Width="80"/>
                                     </WrapPanel>
                                     <WrapPanel Margin="5">
                                         <TextBlock Text="终点速度:" VerticalAlignment="Center" Width="100"/>
