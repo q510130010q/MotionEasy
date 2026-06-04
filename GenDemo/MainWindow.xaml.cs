@@ -1,29 +1,17 @@
-﻿// 引入运动控制相关的模型类（比如轴状态、运动参数等数据结构）
-using GenMotionEasy.Model;
-// 引入运动控制核心库（运动控制器、轴管理等）
+﻿using GenMotionEasy.Model;
 using GenMotionEasy.Motion;
-// 引入运动控制中的具体控制功能（点动、插补、齿轮等）
 using GenMotionEasy.Motion.Control;
-// 引入工具类（比如错误码解析、辅助函数等）
 using GenMotionEasy.Tool;
-// 引入Windows文件对话框（用于打开配置文件）
 using Microsoft.Win32;
-// 引入调试相关功能（这里用于输出调试信息到"输出"窗口）
 using System.Diagnostics;
-// 引入线程支持（用于延时等待EtherCAT总线就绪）
 using System.Threading;
-// 引入WPF核心命名空间（Window、控件基类等）
 using System.Windows;
-// 引入WPF控件命名空间（Button、ComboBox、TextBox等）
 using System.Windows.Controls;
-// 引入WPF界面线程调度器（DispatcherTimer定时器用）
 using System.Windows.Threading;
 
-// 当前代码属于"GenDemo"这个命名空间（可以理解为项目的"文件夹"）
 namespace GenDemo
 {
-    // MainWindow是主窗口类，继承自WPF的Window类
-    // "partial"表示这个类的代码分散在多个文件中（另一个是XAML）
+
     public partial class MainWindow : Window
     {
         // 运动控制管理器对象（负责管理所有轴、连接等核心操作）
@@ -65,7 +53,6 @@ namespace GenDemo
             Loaded += MainWindow_Loaded;
         }
 
-        // 窗口加载完成后执行的方法（相当于"启动后的初始化"）
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // 创建一个状态刷新定时器：每300毫秒（0.3秒）触发一次
