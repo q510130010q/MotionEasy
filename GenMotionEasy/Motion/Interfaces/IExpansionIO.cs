@@ -15,5 +15,8 @@ namespace GenMotionEasy.Motion
         short[] ReadAo(short slaveno, ushort channel, ushort count);
         byte GetOnlineSlaveCount();
         GTN.glink.GLINK_COMM_STS GetCommStatus();
+
+        void RelateGlinkToGpi(short gpi, short slaveno, short bitOffset, short byteOffset);
+        void RelateGlinkToGpo(short gpo, short slaveno, short bitOffset, short byteOffset);
     }
 }

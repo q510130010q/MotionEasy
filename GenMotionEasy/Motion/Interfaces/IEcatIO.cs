@@ -11,5 +11,9 @@ namespace GenMotionEasy.Motion
         void Synch();
         void UpdateUpload();
         void UpdateDownload();
+
+        void RelateSlaveToGpi(short gpi, short ecatIndex, short ecatType, short bitOffset, short pdoOffset);
+        void RelateSlaveToGpo(short gpo, short ecatIndex, short ecatType, short bitOffset, short pdoOffset);
+        void RelateSlaveToAuEncoder(short auenc, short ecatIndex, short ecatType, short pdoOffset, short pdoByteLength);
     }
 }
