@@ -592,9 +592,41 @@ namespace GenDemo
 
         #region PT运动
 
-        // 模式选择变化时的占位事件（这里什么也不做）
+        private bool _ptModeSet;
+        private bool _ptDataPushed;
+        private DispatcherTimer? _ptRtTimer;
+        private double _ptRtPos, _ptRtVel, _ptRtTime;
+        private bool _ptRtStarted;
+
+        private void SetupPtMode()
+        {
+            var axis = GetAxis(SelectedAxis(CboPtAxis));
+
+            if (RdoPtStatic.IsChecked == true)
+                axis.PT.SetStaticMode();
+            else
+                axis.PT.SetDynamicMode();
+
+            if (RdoPtMemSmall.IsChecked == true)
+                axis.PT.SetMemorySmall();
+            else
+                axis.PT.SetMemoryLarge();
+
+            var loop = int.Parse(TxtPtLoop.Text);
+            axis.PT.SetLoop(loop);
+
+            axis.PT.Clear();
+
+            _ptModeSet = true;
+            _ptDataPushed = false;
+            TxtPtStatus.Text = "PT模式已设置";
+            TxtPtStatus.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Blue);
+            Log("PT模式设置完成");
+        }
+
         private void RdoPtMode_Checked(object sender, RoutedEventArgs e)
         {
+            _ptModeSet = false;
         }
 
         // 点击"推送数据"按钮：向PT缓冲区添加一个位置-时间数据点
@@ -602,17 +634,25 @@ namespace GenDemo
         {
             try
             {
+                if (!_ptModeSet) SetupPtMode();
+
                 var axis = GetAxis(SelectedAxis(CboPtAxis));
                 // 读取用户输入的位置值
                 var pos = double.Parse(TxtPtPos.Text);
                 // 读取用户输入的时间值（毫秒）
                 var time = int.Parse(TxtPtTime.Text);
-                // 获取用户选择的段类型（如：直线段、圆弧段等）
-                short segType = (short)CboPtSegType.SelectedIndex;
+                var segType = (short)CboPtSegType.SelectedIndex;
+
+                if (segType == 1 && !_ptDataPushed)
+                {
+                    Log("EVEN段需要前一段定义速度，已自动转为NORMAL");
+                    segType = 0;
+                }
 
                 // 把位置、时间、段类型推送到PT缓冲区
                 axis.PT.PushData(pos, time, segType);
-                // 查询PT缓冲区还剩多少空间
+                _ptDataPushed = true;
+
                 var space = axis.PT.GetSpace();
                 // 显示剩余空间
                 TxtPtSpace.Text = $"剩余空间: {space}";
@@ -628,6 +668,8 @@ namespace GenDemo
             {
                 var axis = GetAxis(SelectedAxis(CboPtAxis));
                 axis.PT.Clear();
+                _ptDataPushed = false;
+                TxtPtSpace.Text = "剩余空间: -";
                 Log("PT数据已清除");
             }
             catch (Exception ex) { Log(ex.Message); }
@@ -638,6 +680,8 @@ namespace GenDemo
         {
             try
             {
+                if (!_ptModeSet) SetupPtMode();
+
                 var axis = GetAxis(SelectedAxis(CboPtAxis));
                 var space = axis.PT.GetSpace();
                 TxtPtSpace.Text = $"剩余空间: {space}";
@@ -650,28 +694,88 @@ namespace GenDemo
         {
             try
             {
+                if (RdoPtDynamic.IsChecked == true)
+                {
+                    StartDynamicDemo();
+                    return;
+                }
+
+                if (!_ptModeSet) { SetupPtMode(); return; }
+
+                if (!_ptDataPushed)
+                {
+                    Log("请先推送数据再启动运动");
+                    return;
+                }
+
                 var axis = GetAxis(SelectedAxis(CboPtAxis));
-
-                // 如果用户选了"静态模式"
-                if (RdoPtStatic.IsChecked == true)
-                    axis.PT.SetStaticMode();   // 静态模式：数据全部推完后再开始运动
-                else
-                    axis.PT.SetDynamicMode();   // 动态模式：边推数据边运动
-
-                // 如果用户选了"小内存"模式
-                if (RdoPtMemSmall.IsChecked == true)
-                    axis.PT.SetMemorySmall();   // 使用较小的缓冲区
-                else
-                    axis.PT.SetMemoryLarge();   // 使用较大的缓冲区
-
-                // 读取用户设置的循环次数
-                var loop = int.Parse(TxtPtLoop.Text);
-                axis.PT.SetLoop(loop);
-
-                // 启动PT运动
                 axis.PT.Start();
+                _ptModeSet = false;
+                _ptDataPushed = false;
                 TxtPtStatus.Text = "PT运动进行中...";
-                Log($"轴{CboPtAxis.SelectedIndex + 1} PT运动启动, 循环={loop}");
+                TxtPtStatus.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Orange);
+                Log($"轴{CboPtAxis.SelectedIndex + 1} PT运动启动");
+            }
+            catch (Exception ex) { Log(ex.Message); }
+        }
+
+        private void StartDynamicDemo()
+        {
+            if (_ptRtTimer != null)
+            {
+                Log("动态演示已在运行");
+                return;
+            }
+
+            var axis = GetAxis(SelectedAxis(CboPtAxis));
+            axis.PT.SetDynamicMode();
+            axis.PT.SetMemoryLarge();
+            axis.PT.Clear();
+
+            _ptRtPos = 0;
+            _ptRtVel = 0;
+            _ptRtTime = 0;
+            _ptRtStarted = false;
+
+            var interval = 50;
+            _ptRtTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(interval) };
+            _ptRtTimer.Tick += PtRtTimer_Tick;
+            _ptRtTimer.Start();
+
+            _ptModeSet = true;
+            TxtPtStatus.Text = "动态演示运行中...";
+            TxtPtStatus.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Orange);
+            Log("动态PT演示启动");
+        }
+
+        private void PtRtTimer_Tick(object? sender, EventArgs e)
+        {
+            try
+            {
+                var axis = GetAxis(SelectedAxis(CboPtAxis));
+                var space = axis.PT.GetSpace();
+
+                if (space > 0)
+                {
+                    var dt = 0.05;
+                    var a = 50000;
+                    var freq = 2 * Math.PI * 0.5;
+                    _ptRtTime += dt;
+                    var vel = a * Math.Sin(freq * _ptRtTime);
+                    _ptRtPos += (vel + _ptRtVel) * dt / 2;
+                    _ptRtVel = vel;
+
+                    axis.PT.PushData(_ptRtPos, (int)(_ptRtTime * 1000), 0);
+                    _ptDataPushed = true;
+                }
+
+                if (space <= 0 && !_ptRtStarted)
+                {
+                    axis.PT.Start();
+                    _ptRtStarted = true;
+                }
+
+                TxtPtSpace.Text = $"剩余空间: {space}";
             }
             catch (Exception ex) { Log(ex.Message); }
         }
@@ -681,9 +785,17 @@ namespace GenDemo
         {
             try
             {
+                _ptRtTimer?.Stop();
+                _ptRtTimer = null;
+                _ptRtStarted = false;
+
                 var axis = GetAxis(SelectedAxis(CboPtAxis));
                 axis.StopAxis();
+                axis.PT.Clear();
+                _ptModeSet = false;
+                _ptDataPushed = false;
                 TxtPtStatus.Text = "PT运动已停止";
+                TxtPtStatus.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Gray);
                 Log("PT运动停止");
             }
             catch (Exception ex) { Log(ex.Message); }
@@ -699,8 +811,7 @@ namespace GenDemo
             try
             {
                 var axis = GetAxis(SelectedAxis(CboPvtAxis));
-                // 获取用户选择的数据表ID
-                var tableId = (short)CboPvtTable.SelectedIndex;
+                var tableId = (short)(CboPvtTable.SelectedIndex + 1);
                 // 读取循环次数
                 var loop = int.Parse(TxtPvtLoop.Text);
                 // 读取总时间（毫秒），转成秒
@@ -715,14 +826,6 @@ namespace GenDemo
                 var vel2 = double.Parse(TxtPvtVel2.Text);
                 var vel3 = double.Parse(TxtPvtVel3.Text);
 
-                // 设置PVT模式
-                axis.PVT.SetMode();
-                // 设置循环次数
-                axis.PVT.SetLoop(loop);
-                // 选择使用哪个数据表
-                axis.PVT.SelectTable(tableId);
-
-                // 根据用户选的PVT模式执行不同的启动方式
                 switch (CboPvtMode.SelectedIndex)
                 {
                     case 0: // 快速启动模式
@@ -752,9 +855,9 @@ namespace GenDemo
                             new[] { 0.0, pos1, pos2 },
                             new[] { 0.0, vel1, vel2 },
                             new double[] { 0, 0, 0 },                 // 加速度
-                            new[] { 50000.0, 50000.0, 50000.0 },      // 最大速度限制
-                            new[] { 1000000.0, 1000000.0, 1000000.0 },// 最大加速度限制
-                            new[] { 1000000.0, 1000000.0, 1000000.0 },// 最大减速度限制
+                            new[] { 50.0, 50.0, 50.0 },      // 最大速度限制
+                            new[] { 1000.0, 1000.0, 1000.0 },// 最大加速度限制
+                            new[] { 1000.0, 1000.0, 1000.0 },// 最大减速度限制
                             0.0, loop);
                         break;
                 }
