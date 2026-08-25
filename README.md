@@ -1,5 +1,7 @@
 # MotionEasy
 
+> 你是否厌倦了固高原生 C++ SDK 那晦涩难懂的 P/Invoke 指针传递？你是否在为多轴状态机同步和异常处理头疼？
+
 MotionEasy 是一个基于 .NET 的运动控制库，用于封装**固高（Googol Tech）**运动控制器的底层 SDK（GTN/GLink），提供简洁、易用的 C# 接口以快速构建多轴运动控制系统。
 
 ## 功能计划
@@ -516,4 +518,4 @@ A: 使用固高 ConfigTool 软件导出 `.cfg` 文件后，通过 `axis.LoadConf
 
 ## 许可证
 
-未指定开源许可证。
+本项目基于 [MIT License](LICENSE) 开源，你可以自由使用、修改、分发本软件，包括用于商业用途。详见 [LICENSE](LICENSE) 文件。
