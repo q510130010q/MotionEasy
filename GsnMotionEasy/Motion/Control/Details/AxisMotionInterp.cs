@@ -1,4 +1,5 @@
-﻿using GenMotionEasy.Tool;
+using GsnMotionEasy.Motion.Interfaces;
+using GsnMotionEasy.Tool;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static GTN.mc;
 
-namespace GenMotionEasy.Motion.Control.Details
+namespace GsnMotionEasy.Motion.Control.Details
 {
     /// <summary>
     /// 插补运动 - 7.5章
@@ -622,7 +623,7 @@ namespace GenMotionEasy.Motion.Control.Details
         {
             lock (_lock)
             {
-                GtnErrorHelper.ThrowIfError(GTN_CrdHsOn(_core, _crd, fifo, link, threshold, lookaheadInMc), "GTN_CrdHsOn");
+                GtnErrorHelper.ThrowIfError(GTN_CrdHsOn(_core, _crd, fifo, link, (short)threshold, lookaheadInMc), "GTN_CrdHsOn");
             }
         }
 

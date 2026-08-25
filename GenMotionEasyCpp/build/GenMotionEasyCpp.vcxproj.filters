@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\src\GtnError.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\src\EcatIO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\src\ExpansionIO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\src\MotionControlManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\src\AxisController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\src\GenMotionEasyCpp_export.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\GenMotionEasyCpp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\GtnTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\StatusInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\GtnError.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\MotionControlManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\AxisController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\EcatIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\ExpansionIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\IAxisController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\IAxisHome.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\IMoveMotion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\IJogMotion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\IPTMotion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\IPVTMotion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\IGearMotion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\IFollowMotion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\IFollowExMotion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\IInterpMotion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\include\GenMotionEasyCpp\IPointMotion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{2F4A987E-A09C-3342-A5CF-A1CA20B4BAA9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{417163EE-FEE4-385A-A124-FCBDF727EED0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

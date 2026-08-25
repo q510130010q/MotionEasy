@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Csharp\GenMotionEasy\DemoMfc\build\CMakeFiles\7215644c9f4329a37e2ee443374c59ea\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{7FFC879C-C72E-355A-AC42-5B24A98A92CF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

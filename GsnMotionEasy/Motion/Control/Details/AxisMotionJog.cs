@@ -1,7 +1,8 @@
-﻿using System;
+using System;
+using GsnMotionEasy.Motion.Interfaces;
 using static GTN.mc;
 
-namespace GenMotionEasy.Motion.Control.Details
+namespace GsnMotionEasy.Motion.Control.Details
 {
     public class AxisMotionJog : IJogMotion
     {
@@ -43,8 +44,7 @@ namespace GenMotionEasy.Motion.Control.Details
         {
             lock (_lock)
             {
-                // mask 为轴位掩码（原误传 1 恒停 1 轴）；option 0=平滑减速停，适合松开点动按钮
-                GTN_Stop(_core, 1 << (_axis - 1), 0);
+                GTN_Stop(_core, 1 << (_axis - 1), 1 << (_axis - 1));
             }
         }
     }

@@ -1,0 +1,17 @@
+#define IDD_MAIN_DIALOG         101
+#define IDC_BTN_OPEN            1001
+#define IDC_BTN_CLOSE           1002
+#define IDC_BTN_ECAT_LOAD       1003
+#define IDC_BTN_ECAT_START      1004
+#define IDC_BTN_AXIS_ON         1005
+#define IDC_BTN_AXIS_OFF        1006
+#define IDC_BTN_JOG_P           1007
+#define IDC_BTN_JOG_N           1008
+#define IDC_BTN_STOP            1009
+#define IDC_BTN_POINT_MOVE      1010
+#define IDC_EDIT_VEL            1011
+#define IDC_EDIT_ACC            1012
+#define IDC_EDIT_DEC            1013
+#define IDC_EDIT_POS            1014
+#define IDC_ST_STATUS           1015
+#define IDC_CMB_AXIS            1016

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Csharp\GenMotionEasy\GenMotionEasyCpp\build\CMakeFiles\ac11ef4aaf08fee53efe8446f11ce2f1\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{961BF6A1-F780-3416-A474-75B65494EAE9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

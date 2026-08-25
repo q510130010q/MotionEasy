@@ -1,16 +1,19 @@
-﻿using GenMotionEasy.Model;
-using GenMotionEasy.Motion.Control.Details;
+using GsnMotionEasy.Model;
+using GsnMotionEasy.Motion.Control.Details;
+using GsnMotionEasy.Motion.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using static GTN.glink;
 using static GTN.mc;
 
-namespace GenMotionEasy.Motion.Control
+namespace GsnMotionEasy.Motion.Control
 {
+    /// <summary>
+    /// 运动控制器轴（Gsn / Glink-II 卡）。
+    /// 与 GenMotionEasy.AxisController 结构一致，但：
+    ///  - 不含 EtherCAT 总线成员（EcatLoad/EcatState/EcatStart）；
+    ///  - 状态查询使用非 Ecat 函数（GTN_GetEncPos / GTN_GetAxisEncVel 等）。
+    /// </summary>
     public class AxisController : IAxisController
     {
         private readonly short _core;
@@ -42,7 +45,7 @@ namespace GenMotionEasy.Motion.Control
             FollowEx = new AxisMotionFollowEx(_core, axis, _lock);
             Gear = new AxisMotionGear(_core, axis, _lock);
             Interp = new AxisMotionInterp(_core, crd, _lock);
-            Point = new AxisMotionPoint(_core, axis, _lock, () => ClearAlarm(), () => GetEcatStatus(), () => EnableAxis());
+            Point = new AxisMotionPoint(_core, axis, _lock, () => ClearAlarm(), () => GetStatus(), () => EnableAxis());
             Jog = new AxisMotionJog(_core, axis, _lock);
         }
 
@@ -82,60 +85,25 @@ namespace GenMotionEasy.Motion.Control
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public short EcatLoad()
-        {
-            GTN_TerminateEcatComm(_core);
-            lock (_lock)
-            {
-                return GTN_InitEcatComm(_core);
-            }
-        }
-
-
-        //查询总线状态
-        public short EcatState()
-        {
-            lock (_lock)
-            {
-                short state;
-                GTN_IsEcatReady(_core, out state);
-                return state;
-            }
-        }
-
-
-        //启动Ecat通信
-        public short EcatStart()
-        {
-            GT_GLinkInitEx(0, 0);
-            lock (_lock)
-            {
-                return GTN_StartEcatComm(_core);
-            }
-        }
-
         public short ClearAlarm(short count = 1)
         {
-            //首先看一下是否轴报警
-
             lock (_lock)
             {
                 return GTN_ClrSts(_core, _axis, count);
             }
         }
 
-        public StatusInfo GetEcatStatus()
+
+        /// <summary>
+        /// 查询轴状态（使用非 Ecat 函数：GTN_GetEncPos / GTN_GetAxisEncVel 等）。
+        /// </summary>
+        public StatusInfo? GetStatus()
         {
             StatusInfo status = new StatusInfo();
             short rtn;
             int tag;
             uint p;
-            //internal static extern short GTN_GetSts(short core, short axis, out Int32 pSts, short count, out UInt32 pClock);
-            rtn = GTN_GetSts(1, _axis, out tag, 1, out p);
+            rtn = GTN_GetSts(_core, _axis, out tag, 1, out p);
             if (rtn != 0) { return null; }
             //伺服报警
             if ((tag & 0x2) != 0)
@@ -219,7 +187,7 @@ namespace GenMotionEasy.Motion.Control
             }
             int pValue;
             uint pClock;
-            GTN_GetPrfMode(1, _axis, out pValue, 1, out pClock);
+            GTN_GetPrfMode(_core, _axis, out pValue, 1, out pClock);
             switch (pValue)
             {
                 case 0:
@@ -247,54 +215,44 @@ namespace GenMotionEasy.Motion.Control
                     status.MotionType = "未知";
                     break;
             }
-            int encValue;
+            double encValue;
             uint encClock;
             double prfValue;
             uint prfClock;
-            GTN_GetEcatEncPos(1, _axis, out encValue);//编码器位置
-            GTN_GetPrfPos(1, _axis, out prfValue, 1, out prfClock);//规划位置
+            GTN_GetEncPos(_core, _axis, out encValue, 1, out encClock);//编码器位置
+            GTN_GetPrfPos(_core, _axis, out prfValue, 1, out prfClock);//规划位置
             status.DriveLocation = encValue;
             status.PlannedLocation = prfValue;
             status.FollowErr = prfValue - encValue;
-            int encVelValue;
+            double encVelValue;
             uint encVelClock;
-            //GTN_GetAxisEncVel(1, _axis, out encVelValue, 1, out encVelClock);
-            GTN_GetEcatEncVel(1, _axis, out encVelValue);
+            GTN_GetAxisEncVel(_core, _axis, out encVelValue, 1, out encVelClock);
             status.DriveVel = encVelValue;
             double encAccValue;
             uint encAccClock;
-            GTN_GetAxisEncAcc(1, _axis, out encAccValue, 1, out encAccClock);
+            GTN_GetAxisEncAcc(_core, _axis, out encAccValue, 1, out encAccClock);
             status.DriveAccVel = encAccValue;
             double prfVelValue;
             uint prfVelClock;
-            GTN_GetAxisPrfVel(1, _axis, out prfVelValue, 1, out prfVelClock);
+            GTN_GetAxisPrfVel(_core, _axis, out prfVelValue, 1, out prfVelClock);
             status.PlannedVel = prfVelValue;
             double prfVelAccValue;
             uint prfVelAccClock;
-            GTN_GetAxisPrfAcc(1, _axis, out prfVelAccValue, 1, out prfVelAccClock);
+            GTN_GetAxisPrfAcc(_core, _axis, out prfVelAccValue, 1, out prfVelAccClock);
             status.PlannedAccVel = prfVelAccValue;
             return status;
         }
 
-
-
-        public void StopAxis()
-        {
-            lock (_lock)
-            {
-                // mask 为轴位掩码（原误传 1 恒停 1 轴）；option 1=急停
-                GTN_Stop(_core, 1 << (_axis - 1), 1);
-            }
-        }
 
         /// <summary>
         /// 查询剩余距离：目标位置 - 编码器位置
         /// </summary>
         public int GetRemainingDistance(int targetPos)
         {
-            int encPos;
-            GTN_GetEcatEncPos(1, _axis, out encPos);
-            return targetPos - encPos;
+            double encPos;
+            uint clock;
+            GTN_GetEncPos(_core, _axis, out encPos, 1, out clock);
+            return targetPos - (int)encPos;
         }
 
         /// <summary>
@@ -311,8 +269,9 @@ namespace GenMotionEasy.Motion.Control
         public async Task<bool> WaitAxisStop(int targetPos, double vel, double acc, double dec,
             double tolerance = 10, int extraSeconds = 5)
         {
-            int encPos;
-            GTN_GetEcatEncPos(1, _axis, out encPos);
+            double encPos;
+            uint encClock;
+            GTN_GetEncPos(_core, _axis, out encPos, 1, out encClock);
             double distance = Math.Abs(targetPos - encPos);
 
             double safeVel = Math.Max(vel, 1);
@@ -326,10 +285,11 @@ namespace GenMotionEasy.Motion.Control
             {
                 double prfPos;
                 uint prfClock;
-                GTN_GetPrfPos(1, _axis, out prfPos, 1, out prfClock);
+                GTN_GetPrfPos(_core, _axis, out prfPos, 1, out prfClock);
 
-                int encPosNow;
-                GTN_GetEcatEncPos(1, _axis, out encPosNow);
+                double encPosNow;
+                uint encClockNow;
+                GTN_GetEncPos(_core, _axis, out encPosNow, 1, out encClockNow);
 
                 if (Math.Abs(prfPos - encPosNow) <= tolerance && Math.Abs(prfPos - targetPos) <= tolerance)
                 {
@@ -340,6 +300,15 @@ namespace GenMotionEasy.Motion.Control
             }
 
             return false;
+        }
+
+
+        public void StopAxis()
+        {
+            lock (_lock)
+            {
+                GTN_Stop(_core, 1 << (_axis - 1), 1 << (_axis - 1));
+            }
         }
 
     }
