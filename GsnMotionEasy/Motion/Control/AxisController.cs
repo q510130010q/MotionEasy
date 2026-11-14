@@ -14,7 +14,7 @@ namespace GsnMotionEasy.Motion.Control
     ///  - 不含 EtherCAT 总线成员（EcatLoad/EcatState/EcatStart）；
     ///  - 状态查询使用非 Ecat 函数（GTN_GetEncPos / GTN_GetAxisEncVel 等）。
     /// </summary>
-    public class AxisController : IAxisController
+    public partial class AxisController : IAxisController
     {
         private readonly short _core;
         private readonly short _axis;
@@ -305,6 +305,7 @@ namespace GsnMotionEasy.Motion.Control
 
         public void StopAxis()
         {
+            RequestProbeCancellation();
             lock (_lock)
             {
                 GTN_Stop(_core, 1 << (_axis - 1), 1 << (_axis - 1));

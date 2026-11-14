@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using static GTN.mc;
@@ -563,6 +563,11 @@ namespace GTN
         public static extern short GTN_SetSoftLimit(short core, short axis, Int32 positive, Int32 negative);
         [DllImport("gts.dll")]
         public static extern short GTN_GetSoftLimit(short core, short axis, out Int32 pPositive, out Int32 pNegative);
+        // GSN-AXIS-SETUP-001: basic-function manual instructions 110 and 201.
+        [DllImport("gts.dll")]
+        public static extern short GTN_SetSoftLimitEx(short core, short axis, double positive, double negative);
+        [DllImport("gts.dll")]
+        public static extern short GTN_GetSoftLimitEx(short core, short axis, out double pPositive, out double pNegative);
         [DllImport("gts.dll")]
         public static extern short GTN_SetAxisBand(short core, short axis, Int32 band, Int32 time);
         [DllImport("gts.dll")]
@@ -3042,6 +3047,9 @@ namespace GTN
         public static extern short GTN_SetDoBit(short core, short doType, short doIndex, short value);
         [DllImport("gts.dll")]
         public static extern short GTN_GetDo(short core, short doType, out Int32 pValue);
+        // GSN-IO-001: basic-function manual instruction 77; Windows long is Int32.
+        [DllImport("gts.dll")]
+        public static extern short GTN_GetDoEx(short core, short doType, out Int32 pValue, short arraySize);
         [DllImport("gts.dll")]
         public static extern short GTN_SetDoBitReverse(short core, short doType, short doIndex, short value, short reverseTime);
         [DllImport("gts.dll")]
@@ -3190,9 +3198,9 @@ namespace GTN
             public ushort outputPulseWidth;
             public ushort errorBand;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-            short[] reserve1;
+            public short[] reserve1;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-            double[] reserve2;
+            public double[] reserve2;
         }
         public struct TPosCompareEnablePro
         {
@@ -3428,6 +3436,8 @@ namespace GTN
         public static extern short GTN_SetModuleFiveAxisDir(short core, short crd, ref short axisDir);
         [DllImport("gts.dll")]
         public static extern short GTN_SetPosCompareModeEx(short core, short index, ref TPosCompareModeEx pMode);
+        [DllImport("gts.dll")]
+        public static extern short GTN_GetPosCompareModeEx(short core, short index, ref TPosCompareModeEx pMode);
         [DllImport("gts.dll")]
         public static extern short GTN_GetPosCompareMode(short core, short index, out TPosCompareMode pMode);
         [DllImport("gts.dll")]

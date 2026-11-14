@@ -17,6 +17,17 @@ namespace GsnMotionEasy.Motion
         private readonly Dictionary<int, AxisController> _axisControllers = new Dictionary<int, AxisController>();
         private short _core = 1;
 
+        // GSN-DMA3D-001 V1.0: one DMA sender per coordinate/FIFO in this manager.
+        private readonly Dictionary<(short Crd, short Fifo),
+            (short Link, short Threshold, GsnDmaCrd3D Controller)> _dmaCrd3D = new();
+
+        // GSN-PSO-001 V1.0: managed two-axis senders and PSO share this SDK-call gate.
+        private readonly GsnBufferedMotionResources _bufferedResources = new();
+        private readonly Dictionary<short, GsnPsoController> _psoControllers = new();
+        private readonly Dictionary<(short Crd, short Fifo),
+            (short Link, short Threshold, GsnDmaCrd2D Controller)> _dmaCrd2D = new();
+        // GSN-IO-001 V1.0: inert, shared-core digital IO accessor.
+        private GsnIoController? _ioController;
         private readonly object _lock = new object();
 
         public MotionControlManager()
@@ -56,9 +67,106 @@ namespace GsnMotionEasy.Motion
         /// </summary>
         public void Close()
         {
-            GTN_Stop(_core, 0xFFF, 0xFFF);
+            lock (_bufferedResources.Gate) _bufferedResources.StopDepth++;
+            try
+            {
+                GsnDmaCrd3D[] legacy;
+                GsnDmaCrd2D[] senders;
+                GsnPsoController[] pso;
+                AxisController[] probeAxes;
+                lock (_lock)
+                {
+                    legacy = _dmaCrd3D.Values.Select(item => item.Controller).ToArray();
+                    senders = _dmaCrd2D.Values.Select(item => item.Controller).ToArray();
+                    pso = _psoControllers.Values.ToArray();
+                    probeAxes = _axisControllers.Values.ToArray();
+                }
+                var failures = new List<Exception>();
+                foreach (var axis in probeAxes) axis.RequestProbeCancellation();
+                foreach (var sender in senders) sender.RequestCancellation();
+                foreach (var controller in pso)
+                {
+                    try { controller.Stop(); } catch (Exception ex) { failures.Add(ex); }
+                }
+                foreach (var sender in senders)
+                {
+                    try { sender.Stop(); } catch (Exception ex) { failures.Add(ex); }
+                }
+                foreach (var sender in legacy)
+                {
+                    try { sender.Stop(); } catch (Exception ex) { failures.Add(ex); }
+                }
+                try { GTN_Stop(_core, 0xFFF, 0xFFF); }
+                catch (Exception ex) { failures.Add(ex); }
+                if (failures.Count != 0)
+                    throw new AggregateException("One or more motion/PSO stop requests failed.", failures);
+            }
+            finally { lock (_bufferedResources.Gate) _bufferedResources.StopDepth--; }
+        }
+        /// <summary>
+        /// Gets the shared 3D DMA sender for this coordinate/FIFO without opening or moving hardware.
+        /// Defaults are legacy source values, not commissioned machine parameters.
+        /// </summary>
+        public GsnDmaCrd3D GetDmaCrd3D(short crd = 1, short fifo = 0, short link = 1, short threshold = 10)
+        {
+            lock (_lock)
+            {
+                var key = (crd, fifo);
+                if (_dmaCrd3D.TryGetValue(key, out var existing))
+                {
+                    if (existing.Link != link || existing.Threshold != threshold)
+                        throw new ArgumentException("This coordinate/FIFO already has a DMA sender with different link/threshold settings.");
+                    return existing.Controller;
+                }
+
+                if (_dmaCrd2D.Any(item => item.Key.Crd == crd || item.Value.Link == link))
+                    throw new InvalidOperationException("This coordinate/DMA link is reserved by a two-axis sender.");
+                var controller = new GsnDmaCrd3D(_core, crd, fifo, link, threshold);
+                _dmaCrd3D.Add(key, (link, threshold, controller));
+                return controller;
+            }
         }
 
+        /// <summary>Gets digital IO without accessing hardware or changing outputs.</summary>
+        public GsnIoController GetIo()
+        {
+            lock (_lock)
+                return _ioController ??= new GsnIoController(_core, _bufferedResources.Gate);
+        }
+        /// <summary>Gets a managed PSO group without native calls. Configure explicitly before use.</summary>
+        public GsnPsoController GetPso(short index)
+        {
+            lock (_lock)
+            {
+                if (_psoControllers.TryGetValue(index, out var existing)) return existing;
+                var controller = new GsnPsoController(_core, index, _bufferedResources);
+                _psoControllers.Add(index, controller);
+                return controller;
+            }
+        }
+
+        /// <summary>Gets an ordinary two-axis DMA sender without initializing or moving hardware.</summary>
+        public GsnDmaCrd2D GetDmaCrd2D(short crd, short fifo, short link, short threshold)
+        {
+            if (crd is < 1 or > 2 || fifo is < 0 or > 1 || link <= 0 || threshold <= 0)
+                throw new ArgumentOutOfRangeException(nameof(crd), "Explicit valid coordinate, FIFO, DMA link and threshold are required.");
+            lock (_lock)
+            {
+                var key = (crd, fifo);
+                if (_dmaCrd2D.TryGetValue(key, out var existing))
+                {
+                    if (existing.Link != link || existing.Threshold != threshold)
+                        throw new ArgumentException("The coordinate/FIFO already has different DMA settings.");
+                    return existing.Controller;
+                }
+                if (_dmaCrd3D.Any(item => item.Key.Crd == crd || item.Value.Link == link) ||
+                    _dmaCrd2D.Any(item => item.Key.Crd == crd || item.Value.Link == link))
+                    throw new InvalidOperationException("This coordinate/DMA link already has a managed sender.");
+                var controller = new GsnDmaCrd2D(_core, crd, fifo, link, threshold, _bufferedResources);
+                _dmaCrd2D.Add(key, (link, threshold, controller));
+                return controller;
+            }
+        }
         public void AddAxis(short axisId, short core)
         {
             lock (_lock)

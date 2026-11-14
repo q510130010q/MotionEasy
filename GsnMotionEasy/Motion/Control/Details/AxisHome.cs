@@ -54,13 +54,13 @@ namespace GsnMotionEasy.Motion.Control.Details
                 homePrm.acc = acc;
                 homePrm.dec = acc;
                 homePrm.moveDir = 1;
-                homePrm.indexDir = 1;
-                homePrm.edge = 0;
+                homePrm.indexDir = -1;
+                homePrm.edge = 1;
                 homePrm.velHigh = switchSpeed;
                 homePrm.velLow = indexSpeed;
-                homePrm.searchHomeDistance = 20000;
-                homePrm.searchIndexDistance = 3000;
-                homePrm.escapeStep = 1000;
+                homePrm.searchHomeDistance = 0;
+                homePrm.searchIndexDistance = 0;
+                homePrm.escapeStep = 1;
                 homePrm.homeOffset = offset;
 
                 GtnErrorHelper.ThrowIfError(GTN_GoHome(_core, _axis, ref homePrm), "GTN_GoHome");
